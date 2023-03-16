@@ -20,6 +20,7 @@ export const Categories = () => {
 
     return (
         <div className="categories">
+            <h1>Categories</h1>
             <Accordion>
                 {categories.map((category, index) => (
                     <Accordion.Item eventKey={index}>
