@@ -7,24 +7,36 @@ namespace back_end.Controllers;
 
 [ApiController]
 [Route("[controller]")]
-public class CategoriesController : ControllerBase
+public class ItemsController : ControllerBase
 {
     private readonly TestDbContext _dbContext;
 
-    private readonly ILogger<CategoriesController> _logger;
+    private readonly ILogger<ItemsController> _logger;
 
-    public CategoriesController(ILogger<CategoriesController> logger, TestDbContext context)
+    public ItemsController(ILogger<ItemsController> logger, TestDbContext context)
     {
         _logger = logger;
         _dbContext = context;
     }
 
     [HttpGet]
-    public async Task<Response> GetAll()
+    public async Task<Response> GetAll([FromQuery] ItemsFilter filter)
     {
         try
         {
-            var records = await _dbContext.Categories.ToListAsync();
+            var records = await (
+                from item in _dbContext.Items
+                join category in _dbContext.Categories on item.CategoryId equals category.CategoryId
+                where item.CategoryId == (filter.categoryId ?? item.CategoryId)
+                select new
+                {
+                    item.ItemId,
+                    item.ItemName,
+                    item.ItemDescription,
+                    item.CategoryId,
+                    CategoryName = category.CategoryName
+                }
+            ).ToListAsync();
 
             return new Response { errorMessage = "", data = records };
         }
@@ -42,7 +54,7 @@ public class CategoriesController : ControllerBase
     {
         try
         {
-            var record = await _dbContext.Categories.Where(c => c.CategoryId == id).FirstOrDefaultAsync();
+            var record = await _dbContext.Items.Where(item => item.ItemId == id).FirstOrDefaultAsync();
             if (record is null)
                 return new Response { errorMessage = "record not found", data = 404 };
 
@@ -58,11 +70,11 @@ public class CategoriesController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<Response> Add(Category category)
+    public async Task<Response> Add(Item item)
     {
         try
         {
-            await _dbContext.Categories.AddAsync(category);
+            await _dbContext.Items.AddAsync(item);
             await _dbContext.SaveChangesAsync();
 
             return new Response { errorMessage = "", data = new { message = "success" } };
@@ -81,11 +93,11 @@ public class CategoriesController : ControllerBase
     {
         try
         {
-            var record = await _dbContext.Categories.Where(c => c.CategoryId == id).FirstOrDefaultAsync();
+            var record = await _dbContext.Items.Where(item => item.ItemId == id).FirstOrDefaultAsync();
             if (record is null)
                 return new Response { errorMessage = "record not found", data = 404 };
 
-            _dbContext.Categories.Remove(record);
+            _dbContext.Items.Remove(record);
             await _dbContext.SaveChangesAsync();
 
             return new Response { errorMessage = "", data = new { message = "success" } };
