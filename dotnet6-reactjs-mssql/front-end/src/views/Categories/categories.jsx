@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Accordion } from "react-bootstrap";
+import { Accordion, Button } from "react-bootstrap";
 import { CategoriesApi } from '../../api/api';
 import { Category } from '../../components/category/category';
 
@@ -20,7 +20,10 @@ export const Categories = () => {
 
     return (
         <div className="categories">
-            <h1>Categories</h1>
+            <h1>
+                Categories
+                <Button variant="success" size="sm" onClick={() => { }} className="float-end">Add</Button>
+            </h1>
             <Accordion>
                 {categories.map((category, index) => (
                     <Accordion.Item eventKey={index}>
