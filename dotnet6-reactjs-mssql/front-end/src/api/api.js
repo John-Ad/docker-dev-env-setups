@@ -53,10 +53,17 @@ export class ItemsApi {
 
     /**
      * Get All Items
+     * @param {{
+     *    categoryId: number;
+     * }} searchParams
      * @returns {Promise<{errorMessage:string, data: any}>}
      */
-    static async getAll() {
-        let response = await Connection.getRequest(this.BaseEndpoint, {});
+    static async getAll(searchParams) {
+        let qry = "";
+        if (searchParams)
+            qry = "?categoryId=" + searchParams.categoryId;
+
+        let response = await Connection.getRequest(this.BaseEndpoint + qry, {});
         return response;
     }
 
