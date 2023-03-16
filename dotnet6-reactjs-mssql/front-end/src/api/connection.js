@@ -1,4 +1,4 @@
-import Axios, { AxiosRequestConfig, AxiosResponse } from "axios";
+import Axios from "axios";
 
 const REQ_TYPE_GET = 1;
 const REQ_TYPE_POST = 2;

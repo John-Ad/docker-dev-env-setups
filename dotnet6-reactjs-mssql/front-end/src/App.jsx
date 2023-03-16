@@ -1,6 +1,7 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import './App.css'
 import { Categories } from './views/Categories/categories'
+import { Home } from './views/home/home'
 import { Items } from './views/Items/items'
 
 const App = () => {
