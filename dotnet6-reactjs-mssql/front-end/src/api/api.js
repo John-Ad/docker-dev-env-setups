@@ -43,7 +43,7 @@ export class CategoriesApi {
      * @returns {Promise<{errorMessage:string, data: any}>} 
      */
     static async delete(id) {
-        let response = await Connection.deleteRequest(this.BaseEndpoint + "/" + id);
+        let response = await Connection.delRequest(this.BaseEndpoint + "/" + id);
         return response;
     }
 }
@@ -99,7 +99,7 @@ export class ItemsApi {
      * @returns {Promise<{errorMessage:string, data: any}>}
      */
     static async delete(id) {
-        let response = await Connection.deleteRequest(this.BaseEndpoint + "/" + id);
+        let response = await Connection.delRequest(this.BaseEndpoint + "/" + id);
         return response;
     }
 }

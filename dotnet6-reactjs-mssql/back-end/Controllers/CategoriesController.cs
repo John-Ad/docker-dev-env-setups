@@ -6,7 +6,7 @@ using back_end.Models;
 namespace back_end.Controllers;
 
 [ApiController]
-[Route("[controller]")]
+[Route("api/[controller]")]
 public class CategoriesController : ControllerBase
 {
     private readonly TestDbContext _dbContext;
@@ -58,11 +58,19 @@ public class CategoriesController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<Response> Add(Category category)
+    public async Task<Response> Add(AddCategoryRequest data)
     {
         try
         {
-            await _dbContext.Categories.AddAsync(category);
+
+            Category newCategory = new Category
+            {
+                CategoryName = data.categoryName,
+                CategoryDescription = data.categoryDescription,
+                CreatedAt = DateTimeOffset.UtcNow.ToUnixTimeSeconds()
+            };
+
+            await _dbContext.Categories.AddAsync(newCategory);
             await _dbContext.SaveChangesAsync();
 
             return new Response { errorMessage = "", data = new { message = "success" } };

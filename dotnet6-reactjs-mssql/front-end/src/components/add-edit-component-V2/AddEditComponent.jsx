@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Button, Form, Modal, ProgressBar, Row } from "react-bootstrap";
-import { errorToast } from "../alert-components/toasts";
+import { Button, Form, Modal } from "react-bootstrap";
 import Loading from "../loading-component/loading";
 
 const INPUT_TYPE_NUMBER = "number";

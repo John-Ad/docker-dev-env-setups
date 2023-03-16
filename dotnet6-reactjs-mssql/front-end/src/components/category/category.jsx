@@ -12,7 +12,8 @@ import { CategoriesApi, ItemsApi } from '../../api/api';
  *     categoryDescription: string,
  *     createdAt: string,
  *  },
- *  refresh: () => void
+ *  refresh: () => void,
+ *  showItems: boolean
  * }} props 
  * @returns React.Component
  */
@@ -21,11 +22,13 @@ export const Category = (props) => {
     const [items, setItems] = useState([]);
 
     useEffect(() => {
-        getItems();
+        props.showItems &&
+            getItems();
     }, []);
 
     const getItems = async () => {
-        let response = await ItemsApi.getAll({ categoryId: props.category.categoryID });
+        console.log(props.category);
+        let response = await ItemsApi.getAll({ categoryId: props.category.categoryId });
         if (response.errorMessage !== "")
             return;
 
@@ -33,7 +36,7 @@ export const Category = (props) => {
     }
 
     const deleteCategory = async () => {
-        let response = await CategoriesApi.delete(props.category.categoryID);
+        let response = await CategoriesApi.delete(props.category.categoryId);
         if (response.errorMessage !== "")
             alert(response.errorMessage);
 
@@ -43,9 +46,9 @@ export const Category = (props) => {
 
     return (
         <div>
-            <h1>
+            <h1 className='vert-flex' style={{ padding: "5px" }}>
                 {props.category.categoryName}
-                <Button variant="danger" size="sm" className="float-end" onClick={deleteCategory}>Delete</Button>
+                <Button style={{ marginLeft: "20px" }} variant="danger" size="sm" className="float-end" onClick={deleteCategory}>Delete</Button>
             </h1>
             <p>
                 {props.category.categoryDescription}
@@ -53,16 +56,21 @@ export const Category = (props) => {
 
             <hr />
 
-            <h2>
-                Items
-            </h2>
-            <ul>
-                {items.map((item, index) => (
-                    <li key={index}>
-                        {item.itemName}
-                    </li>
-                ))}
-            </ul>
+            {
+                props.showItems &&
+                <div>
+                    <h4>
+                        Items
+                    </h4>
+                    <ul>
+                        {items.map((item, index) => (
+                            <li key={index}>
+                                {item.itemName}
+                            </li>
+                        ))}
+                    </ul>
+                </div>
+            }
         </div>
     )
 }

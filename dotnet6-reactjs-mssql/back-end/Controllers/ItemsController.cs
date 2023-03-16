@@ -6,7 +6,7 @@ using back_end.Models;
 namespace back_end.Controllers;
 
 [ApiController]
-[Route("[controller]")]
+[Route("api/[controller]")]
 public class ItemsController : ControllerBase
 {
     private readonly TestDbContext _dbContext;

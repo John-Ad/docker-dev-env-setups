@@ -23,14 +23,14 @@ export class Connection {
         try {
 
             // set token
-            config.headers = {
-                "Authorization": `Bearer ${this.token}`
-            }
+            // config.headers = {
+            //     "Authorization": `Bearer ${this.token}`
+            // }
 
             // only throw error if response >= 500
-            config.validateStatus = (status) => {
-                return status < 500;
-            }
+            // config.validateStatus = (status) => {
+            //     return status < 500;
+            // }
 
             let url = this.BaseUrl + endpoint;
             let response;
