@@ -35,9 +35,9 @@ export const Categories = () => {
 
     return (
         <div className="categories">
-            <h1 className='vert-flex'>
+            <h1 className='vert-flex' style={{ padding: "20px" }}>
                 Categories
-                <Button style={{ marginLeft: "20px" }} variant="success" size="lg" onClick={() => setShowAddCategory(true)} className="float-end">Add</Button>
+                <Button style={{ marginLeft: "20px" }} variant="success" size="lg" onClick={() => setShowAddCategory(true)} className="float-end btn">Add</Button>
             </h1>
             <Accordion>
                 {categories.map((category, index) => (

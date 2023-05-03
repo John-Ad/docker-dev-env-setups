@@ -46,7 +46,7 @@ export const Category = (props) => {
 
     return (
         <div>
-            <h1 className='vert-flex' style={{ padding: "5px" }}>
+            <h1 className='vert-flex' style={{ padding: "20px" }}>
                 {props.category.categoryName}
                 <Button style={{ marginLeft: "20px" }} variant="danger" size="sm" className="float-end" onClick={deleteCategory}>Delete</Button>
             </h1>

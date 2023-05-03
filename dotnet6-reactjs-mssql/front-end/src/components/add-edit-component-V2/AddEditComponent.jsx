@@ -25,7 +25,11 @@ export class Field {
      * @param {string} type 
      * @param {boolean} required 
      * @param {number?} numberStep 
-     * @param {number[]|string[]|undefined} selectValues 
+     * @param {
+     *    {
+     *       value: string|number,
+     *       name: string,
+     *    }|undefined} selectValues 
      * @param {} radioValues 
      */
     constructor(
