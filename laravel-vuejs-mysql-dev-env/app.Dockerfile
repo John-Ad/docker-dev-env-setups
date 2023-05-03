@@ -35,7 +35,4 @@ RUN curl -fsSL https://deb.nodesource.com/setup_18.x | bash - \
 # Set working directory
 WORKDIR /app
 
-# Expose port
-EXPOSE 9000
-
 CMD ["php-fpm"]
