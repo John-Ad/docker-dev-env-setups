@@ -1,5 +1,5 @@
-drop table if exists Users;
-create table Users
+drop table if exists users;
+create table users
 (
     id         integer primary key auto_increment,
     email      text not null,
@@ -7,8 +7,8 @@ create table Users
     created_at datetime default current_timestamp
 );
 
-drop table if exists Tasks;
-create table Tasks
+drop table if exists tasks;
+create table tasks
 (
     id           integer primary key auto_increment,
     user_id      integer not null,
@@ -18,5 +18,5 @@ create table Tasks
     created_at   datetime default current_timestamp,
     completed_at datetime,
 
-    foreign key (user_id) references Users (id) on delete cascade
+    foreign key (user_id) references users (id) on delete cascade
 );
