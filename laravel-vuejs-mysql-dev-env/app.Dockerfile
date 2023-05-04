@@ -24,6 +24,7 @@ RUN echo "en_US.UTF-8 UTF-8" > /etc/locale.gen && \
 
 # Install PHP extensions
 RUN docker-php-ext-install pdo_mysql zip exif pcntl bcmath gd
+RUN pecl install xdebug && docker-php-ext-enable xdebug
 
 # Install Composer
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer

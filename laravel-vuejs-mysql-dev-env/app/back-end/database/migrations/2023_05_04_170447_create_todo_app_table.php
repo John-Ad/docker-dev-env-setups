@@ -2,11 +2,9 @@
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
      *
@@ -17,8 +15,8 @@ return new class extends Migration
         Schema::create('tasks', function (Blueprint $table) {
             $table->integer('id', true);
             $table->integer('user_id')->index('user_id');
-            $table->string('title', 65535);
-            $table->string('description', 65535)->nullable();
+            $table->text('title');
+            $table->text('description')->nullable();
             $table->integer('position');
             $table->string('created_at', 0)->nullable()->default('CURRENT_TIMESTAMP');
             $table->string('completed_at', 0)->nullable();
@@ -26,8 +24,8 @@ return new class extends Migration
 
         Schema::create('users', function (Blueprint $table) {
             $table->integer('id', true);
-            $table->string('email', 65535);
-            $table->string('password', 65535);
+            $table->text('email');
+            $table->text('password');
             $table->string('created_at', 0)->nullable()->default('CURRENT_TIMESTAMP');
         });
 
