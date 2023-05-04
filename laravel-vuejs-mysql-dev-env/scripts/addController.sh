@@ -7,12 +7,14 @@ if [[ $PWD == '/' ]]; then
     exit 1
 fi
 
-echo "In laravel-vuejs-mysql-dev-env directory"
+echo "enter model name"
+read modelName
+modelNameController=$modelName"Controller"
 
 # get id of docker container with name laravel-vuejs-mysql-dev-env-app
 containerId=$(docker ps -aqf "name=laravel-vuejs-mysql-dev-env-app")
 
-# generate db models
-docker exec -it $containerId bash -c "cd ./back-end && php artisan krlove:generate:models"
+# generate controller
+docker exec -it $containerId bash -c "cd ./back-end && php artisan make:controller $modelNameController --model=$modelName --api"
 
 bash ./scripts/removePermissionLock.sh
