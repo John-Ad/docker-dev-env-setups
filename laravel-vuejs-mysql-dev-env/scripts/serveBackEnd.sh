@@ -13,4 +13,4 @@ echo "In laravel-vuejs-mysql-dev-env directory"
 containerId=$(docker ps -aqf "name=laravel-vuejs-mysql-dev-env-app")
 
 # in the bash shell of the docker container with id $containerId cd into ./back-end and run "npm run serve"
-docker exec -it $containerId bash -c "cd ./back-end && npm run serve"
+docker exec -it $containerId bash -c "cd ./back-end && php artisan route:clear && npm run serve"
