@@ -20,8 +20,10 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 // Auth routes
-Route::post('/auth/login', [UserController::class, 'login']);
-Route::post('/auth/register', [UserController::class, 'register']);
+Route::controller(UserController::class)->group(function () {
+    Route::post('/auth/login', 'login');
+    Route::post('/auth/register', 'register');
+});
 
 // Task Routes
 Route::get('/tasks', function (Request $request) {

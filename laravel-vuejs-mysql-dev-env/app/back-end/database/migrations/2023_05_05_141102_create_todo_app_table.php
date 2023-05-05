@@ -19,6 +19,7 @@ return new class extends Migration {
             $table->text('description')->nullable();
             $table->integer('position');
             $table->string('created_at', 0)->nullable()->default('CURRENT_TIMESTAMP');
+            $table->string('updated_at', 0)->nullable()->default('CURRENT_TIMESTAMP');
             $table->string('completed_at', 0)->nullable();
         });
 
@@ -27,6 +28,7 @@ return new class extends Migration {
             $table->text('email');
             $table->text('password');
             $table->string('created_at', 0)->nullable()->default('CURRENT_TIMESTAMP');
+            $table->string('updated_at', 0)->nullable()->default('CURRENT_TIMESTAMP');
         });
 
         Schema::table('tasks', function (Blueprint $table) {
@@ -48,5 +50,7 @@ return new class extends Migration {
         Schema::dropIfExists('users');
 
         Schema::dropIfExists('tasks');
+
+        Schema::dropIfExists('personal_access_tokens');
     }
 };

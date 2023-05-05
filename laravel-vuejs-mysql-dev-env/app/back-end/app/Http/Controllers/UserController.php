@@ -34,7 +34,7 @@ class UserController extends Controller
         } catch (\Exception $e) {
             report($e);
             return response()->json(
-                new ApiResponse(500, "Internal server error"),
+                new ApiResponse(500, "An error occurred"),
                 500
             );
         }
