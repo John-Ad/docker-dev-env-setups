@@ -6,6 +6,7 @@ use App\Models\ApiResponse;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
@@ -18,9 +19,16 @@ class UserController extends Controller
     public function login(Request $request): JsonResponse
     {
         try {
+            if (!$request->email || !$request->password) {
+                return response()->json(
+                    new ApiResponse(400, "Email and password are required"),
+                    400
+                );
+            }
+
             $user = User::query()->where('email', $request->email)->first();
 
-            if ($user && $user->password === $request->password) {
+            if ($user && $user->password === Hash::make($request->password)) {
                 return response()->json(
                     new ApiResponse($user, "Incorrect username or password"),
                     200
@@ -66,7 +74,7 @@ class UserController extends Controller
 
             $user = User::query()->create([
                 'email' => $request->email,
-                'password' => $request->password,
+                'password' => Hash::make($request->password),
             ]);
 
             return response()->json(
