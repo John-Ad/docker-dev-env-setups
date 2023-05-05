@@ -28,16 +28,23 @@ class UserController extends Controller
 
             $user = User::query()->where('email', $request->email)->first();
 
-            if ($user && $user->password === Hash::make($request->password)) {
+            if (!$user) {
                 return response()->json(
-                    new ApiResponse($user, "Incorrect username or password"),
-                    200
+                    new ApiResponse(401, "user not found"),
+                    404
+                );
+            }
+
+            if (Hash::check($request->password, $user->password) === false) {
+                return response()->json(
+                    new ApiResponse(400, "Incorrect password"),
+                    400
                 );
             }
 
             return response()->json(
-                new ApiResponse(401, "Incorrect username or password"),
-                401
+                new ApiResponse(200, "success"),
+                200
             );
         } catch (\Exception $e) {
             report($e);
