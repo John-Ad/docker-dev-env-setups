@@ -2,6 +2,7 @@
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration {
@@ -18,17 +19,17 @@ return new class extends Migration {
             $table->text('title');
             $table->text('description')->nullable();
             $table->integer('position');
-            $table->string('created_at', 0)->nullable()->default('CURRENT_TIMESTAMP');
-            $table->string('updated_at', 0)->nullable()->default('CURRENT_TIMESTAMP');
-            $table->string('completed_at', 0)->nullable();
+            $table->dateTime('created_at')->nullable()->default(DB::raw('CURRENT_TIMESTAMP'));
+            $table->dateTime('updated_at')->nullable()->default(DB::raw('CURRENT_TIMESTAMP'));
+            $table->dateTime('completed_at')->nullable();
         });
 
         Schema::create('users', function (Blueprint $table) {
             $table->integer('id', true);
             $table->text('email');
             $table->text('password');
-            $table->string('created_at', 0)->nullable()->default('CURRENT_TIMESTAMP');
-            $table->string('updated_at', 0)->nullable()->default('CURRENT_TIMESTAMP');
+            $table->dateTime('created_at')->nullable()->default(DB::raw('CURRENT_TIMESTAMP'));
+            $table->dateTime('updated_at')->nullable()->default(DB::raw('CURRENT_TIMESTAMP'));
         });
 
         Schema::table('tasks', function (Blueprint $table) {

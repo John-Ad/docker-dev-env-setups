@@ -7,6 +7,7 @@ use App\Models\Task;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class TaskController extends Controller
 {
@@ -22,6 +23,8 @@ class TaskController extends Controller
             $tasks = Task::query()->where('user_id', $id)
                 ->orderBy('position', 'asc')
                 ->get();
+
+            Log::debug('tasks' . $tasks);
 
             return response()->json(
                 new ApiResponse($tasks, ""),

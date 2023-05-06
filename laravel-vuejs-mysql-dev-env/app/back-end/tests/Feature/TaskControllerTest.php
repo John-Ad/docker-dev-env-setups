@@ -6,7 +6,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Carbon;
 use Tests\TestCase;
 
-class UserControllerTest extends TestCase
+class TaskControllerTest extends TestCase
 {
     use RefreshDatabase;
 
