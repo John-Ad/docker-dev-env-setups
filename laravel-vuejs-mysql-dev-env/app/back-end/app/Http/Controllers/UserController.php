@@ -43,7 +43,7 @@ class UserController extends Controller
             }
 
             return response()->json(
-                new ApiResponse(200, "success"),
+                new ApiResponse($user->id, ""),
                 200
             );
         } catch (\Exception $e) {
@@ -85,7 +85,7 @@ class UserController extends Controller
             ]);
 
             return response()->json(
-                new ApiResponse($user, "User created successfully"),
+                new ApiResponse($user->id, ""),
                 201
             );
         } catch (\Exception $e) {
