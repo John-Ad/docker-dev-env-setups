@@ -2,48 +2,129 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\ApiResponse;
 use App\Models\Task;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 class TaskController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Get all tasks for a user
+     * @param Request $request
+     * @return JsonResponse
      */
-    public function index()
+    public function getAllForUser(Request $request): JsonResponse
     {
-        //
+        try {
+            $tasks = Task::query()->where('user_id', $request->userId)->get();
+
+            return response()->json(
+                new ApiResponse($tasks, ""),
+                400
+            );
+        } catch (\Exception $e) {
+            report($e);
+            return response()->json(
+                new ApiResponse(500, "Server error"),
+                500
+            );
+        }
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Add a new task
+     * @param Request $request
+     * @return JsonResponse
      */
-    public function store(Request $request)
+    public function add(Request $request): JsonResponse
     {
-        //
+        try {
+            $position = Task::query()->where('user_id', $request->userId)->max('position');
+
+            $task = new Task();
+            $task->user_id = $request->userId;
+            $task->title = $request->title;
+            $task->position = $position + 1;
+            $task->save();
+
+            return response()->json(
+                new ApiResponse($task, ""),
+                201
+            );
+        } catch (\Exception $e) {
+            report($e);
+            return response()->json(
+                new ApiResponse(500, "Server error"),
+                500
+            );
+        }
     }
 
     /**
-     * Display the specified resource.
+     * Update a task
+     * @param Request $request
+     * @return JsonResponse
      */
-    public function show(Task $task)
+    public function update(Request $request): JsonResponse
     {
-        //
+        try {
+            $task = Task::query()->where('id', $request->id)->first();
+
+            if (!$task) {
+                return response()->json(
+                    new ApiResponse(404, "Task not found"),
+                    404
+                );
+            }
+
+            $task->title = $request->title ?? $task->title;
+            $task->completed_at = $request->completedAt ?? $task->completed_at;
+            $task->position = $request->position ?? $task->position;
+            $task->save();
+
+            return response()->json(
+                new ApiResponse($task, ""),
+                200
+            );
+        } catch (\Exception $e) {
+            report($e);
+            return response()->json(
+                new ApiResponse(500, "Server error"),
+                500
+            );
+        }
     }
 
     /**
-     * Update the specified resource in storage.
+     * Delete a task
+     * @param Request $request
+     * @return JsonResponse
      */
-    public function update(Request $request, Task $task)
+    public function delete(Request $request): JsonResponse
     {
-        //
-    }
+        try {
+            $task = Task::query()->where('id', $request->id)->first();
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Task $task)
-    {
-        //
+            if (!$task) {
+                return response()->json(
+                    new ApiResponse(404, "Task not found"),
+                    404
+                );
+            }
+
+            $task->delete();
+
+            return response()->json(
+                new ApiResponse(200, ""),
+                200
+            );
+        } catch (\Exception $e) {
+            report($e);
+            return response()->json(
+                new ApiResponse(500, "Server error"),
+                500
+            );
+        }
     }
 }
