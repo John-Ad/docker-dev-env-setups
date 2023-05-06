@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\TaskController;
 use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -25,16 +26,11 @@ Route::controller(UserController::class)->group(function () {
     Route::post('/auth/register', 'register');
 });
 
-// Task Routes
-Route::get('/tasks', function (Request $request) {
-    return "hello";
+Route::controller(TaskController::class)->group(function () {
+    Route::get('/tasks/{id}', 'getAllForUser');
+    Route::post('/tasks', 'add');
+    Route::post('/tasks/{id}', 'update');
+    Route::delete('/tasks/{id}', 'delete');
 });
-Route::get('/tasks/{id}', function (Request $request, $id) {
-    return "hello";
-});
-Route::post('/tasks', function (Request $request) {
-    return "hello";
-});
-Route::post('/tasks/{id}', function (Request $request, $id) {
-    return "hello";
-});
+
+
