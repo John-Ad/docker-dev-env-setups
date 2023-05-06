@@ -12,22 +12,12 @@ import Navbar from "./components/Navbar.vue";
 </template>
 
 <style scoped>
+
 .main-container {
-    margin-top: 100px;
+    width: 100vw;
+    padding-left: 4rem;
+    padding-right: 4rem;
+    margin: 5rem 0 0;
 }
 
-.logo {
-    height: 6em;
-    padding: 1.5em;
-    will-change: filter;
-    transition: filter 300ms;
-}
-
-.logo:hover {
-    filter: drop-shadow(0 0 2em #646cffaa);
-}
-
-.logo.vue:hover {
-    filter: drop-shadow(0 0 2em #42b883aa);
-}
 </style>
