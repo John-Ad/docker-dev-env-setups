@@ -4,11 +4,9 @@ export interface ITask {
     id: number;
     user_id: number;
     title: string;
-    description: string;
-    position: number;
-    created_at: string;
-    updated_at: string;
-    completed_at: string;
+    description?: string;
+    position?: number;
+    completed_at?: string;
 }
 
 export class TasksApi {

@@ -20,7 +20,7 @@ const vuetify = createVuetify({
 const router = createRouter({
     history: createWebHistory(),
     routes: [
-        {path: '/', component: Home},
+        {path: '/home', component: Home},
         {path: '/login', component: Login},
         {path: '/register', component: Register},
     ]
