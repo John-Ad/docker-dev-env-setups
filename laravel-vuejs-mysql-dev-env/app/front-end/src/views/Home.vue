@@ -2,6 +2,7 @@
 
 import {onMounted, onUpdated, ref} from "vue";
 import {ITask, TasksApi} from "../api/tasksApi.ts";
+import Task from "../components/Task.vue";
 
 const loadingTasks = ref(false);
 const addingTask = ref(false);
@@ -16,6 +17,7 @@ const addTask = async () => {
         return;
 
     showAddTaskDialog.value = false;
+    newTaskTitle.value = "";
     getAllTasks();
 }
 
@@ -62,7 +64,7 @@ onUpdated(() => {
         <v-progress-linear color="primary" v-if="loadingTasks" indeterminate></v-progress-linear>
         <v-list>
             <v-list-item v-for="task in tasks" :key="task.id">
-                <p>{{ task.title }}</p>
+                <Task :task="task"/>
             </v-list-item>
         </v-list>
 

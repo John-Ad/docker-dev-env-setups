@@ -75,7 +75,7 @@ export class TasksApi {
             title: title ?? null,
             description: description ?? null,
             position: position ?? null,
-            completedAt: completed ? new Date().toISOString() : null
+            completed: completed ?? null
         });
         if (result.status === 500) {
             alert("server error");
