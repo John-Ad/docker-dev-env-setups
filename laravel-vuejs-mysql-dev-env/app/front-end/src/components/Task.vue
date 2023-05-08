@@ -1,7 +1,5 @@
 <script setup lang="ts">
 
-// pass in task as prop
-
 import {ITask} from "../api/tasksApi.ts";
 import {
     mdiCheckboxBlankOutline,

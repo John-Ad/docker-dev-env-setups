@@ -130,16 +130,8 @@ class TaskController extends Controller
                 }
             }
 
-            if ($request->completedAt) {
-                //check if completed_at is valid datetime
-                $dt = \DateTime::createFromFormat('Y-m-d H:i:s', $request->completedAt);
-                if (!$dt) {
-                    return response()->json(
-                        new ApiResponse(400, "Invalid datetime format"),
-                        400
-                    );
-                }
-                $task->completed_at = $request->completedAt;
+            if ($request->completed) {
+                $task->completed_at = $request->completed == true ? now() : null;
             }
 
             $task->save();

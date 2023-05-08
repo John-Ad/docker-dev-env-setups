@@ -1,6 +1,7 @@
 <script setup lang="ts">
 
 import {onMounted, onUpdated, ref} from "vue";
+import draggable from "vuedraggable";
 import {ITask, TasksApi} from "../api/tasksApi.ts";
 import Task from "../components/Task.vue";
 
@@ -9,6 +10,8 @@ const addingTask = ref(false);
 const showAddTaskDialog = ref(false);
 const newTaskTitle = ref("");
 const tasks = ref<ITask[]>([]);
+const tasksToDisplay = ref<ITask[]>([]);
+
 const addTask = async () => {
     addingTask.value = true;
     const result = await TasksApi.add(5, newTaskTitle.value);
@@ -21,17 +24,41 @@ const addTask = async () => {
     getAllTasks();
 }
 
+const updateTask = async (id: number, title?: string, description?: string, position?: number, completed?: boolean): Promise<boolean> => {
+    const result = await TasksApi.update(id, title, description, position, completed);
+    if (!result)
+        return false;
+
+    getAllTasks();
+    return true;
+}
+
 const getAllTasks = async () => {
     loadingTasks.value = true;
-    tasks.value = await TasksApi.getAllForUser(5);
+    const data = await TasksApi.getAllForUser(5);
+    tasks.value = data;
+    tasksToDisplay.value = data;
     loadingTasks.value = false;
+}
+
+const handleDragChange = async (elem: any) => {
+    const {moved} = elem;
+    const {element, oldIndex, newIndex} = moved;
+    const taskInOldPosition = tasks.value[oldIndex];
+    const taskInNewPosition = tasks.value[newIndex];
+
+    const result = await updateTask(taskInOldPosition.id, undefined, undefined, taskInNewPosition.position, undefined);
+    if (result)
+        return;
+
+    tasksToDisplay.value = tasks.value;
 }
 
 onMounted(() => {
     getAllTasks();
 });
 onUpdated(() => {
-    console.log(tasks.value);
+    // console.log(tasks.value);
 });
 </script>
 
@@ -63,9 +90,15 @@ onUpdated(() => {
     <div class="home-task-list">
         <v-progress-linear color="primary" v-if="loadingTasks" indeterminate></v-progress-linear>
         <v-list>
-            <v-list-item v-for="task in tasks" :key="task.id">
-                <Task :task="task"/>
-            </v-list-item>
+            <draggable
+                    v-model="tasks"
+                    item-key="id"
+                    @change="handleDragChange"
+            >
+                <template #item="{ element }">
+                    <Task :task="element"/>
+                </template>
+            </draggable>
         </v-list>
 
         <h3 v-if="tasks.length===0&&!loadingTasks">No tasks found.</h3>
