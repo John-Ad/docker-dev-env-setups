@@ -17,7 +17,10 @@ export class AuthApi {
             return 0;
         }
 
-        let result: IResult = await Connection.post("/api/auth/login", {username: email, password});
+        let result: IResult = await Connection.post("/api/auth/login", {
+            email: email,
+            password: password
+        });
         if (result.status === 500) {
             alert("server error");
             return 0;
@@ -48,7 +51,10 @@ export class AuthApi {
             return 0;
         }
 
-        let result: IResult = await Connection.post("/api/auth/register", {username: email, password});
+        let result: IResult = await Connection.post("/api/auth/register", {
+            email: email,
+            password: password
+        });
         if (result.status === 500) {
             alert("server error");
             return 0;

@@ -2,6 +2,7 @@
 
 import {useRouter} from "vue-router";
 import {ref} from "vue";
+import {AuthApi} from "../api/authApi.ts";
 
 const router = useRouter();
 const email = ref("");
@@ -13,6 +14,13 @@ const setEmail = (e: any) => {
 const setPassword = (e: any) => {
     password.value = e.target.value;
 }
+const login = async () => {
+    let result = await AuthApi.login(email.value, password.value);
+    if (result === 0)
+        return;
+
+    await router.push("/home");
+}
 
 </script>
 
@@ -21,7 +29,7 @@ const setPassword = (e: any) => {
     <v-form class="login-form">
         <v-text-field @change="setEmail" type="email" label="Email"></v-text-field>
         <v-text-field @change="setPassword" type="password" label="Password"></v-text-field>
-        <v-btn>Login</v-btn>
+        <v-btn @click="login">Login</v-btn>
     </v-form>
 </template>
 
@@ -29,8 +37,7 @@ const setPassword = (e: any) => {
 
 .login-form {
     width: 400px;
-    margin: 0 auto;
-    margin-top: 3rem;
+    margin: 3rem auto 0;
 }
 
 </style>

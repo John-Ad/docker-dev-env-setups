@@ -2,6 +2,7 @@
 
 import {useRouter} from "vue-router";
 import {ref} from "vue";
+import {AuthApi} from "../api/authApi.ts";
 
 const router = useRouter();
 const email = ref("");
@@ -18,6 +19,21 @@ const setConfirmPassword = (e: any) => {
     confirmPassword.value = e.target.value;
 }
 
+const register = async () => {
+    if (password.value !== confirmPassword.value) {
+        alert("Passwords do not match");
+        return;
+    }
+
+    let result = await AuthApi.register(email.value, password.value);
+    if (result === 0)
+        return;
+    else
+        alert("Successfully registered");
+
+    await router.push("/login");
+}
+
 </script>
 
 <template>
@@ -26,7 +42,7 @@ const setConfirmPassword = (e: any) => {
         <v-text-field @change="setEmail" type="email" label="Email"></v-text-field>
         <v-text-field @change="setPassword" type="password" label="Password"></v-text-field>
         <v-text-field @change="setConfirmPassword" type="password" label="Confirm Password"></v-text-field>
-        <v-btn>Register</v-btn>
+        <v-btn @click="register">Register</v-btn>
     </v-form>
 </template>
 
