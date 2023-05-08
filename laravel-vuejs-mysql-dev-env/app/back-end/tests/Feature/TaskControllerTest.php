@@ -3,7 +3,6 @@
 namespace Tests\Feature;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Support\Carbon;
 use Tests\TestCase;
 
 class TaskControllerTest extends TestCase
@@ -77,12 +76,9 @@ class TaskControllerTest extends TestCase
      */
     public function test_update_task_successful(): void
     {
-        $dt = Carbon::now();
-
         $response = $this->post('/api/tasks/1', [
             'title' => 'title',
-            'completed_at' => $dt->toString(),
-            'position' => 3
+            'completed' => true,
         ]);
 
         $response->assertStatus(200);
@@ -93,15 +89,61 @@ class TaskControllerTest extends TestCase
      */
     public function test_update_task_failed_task_not_found(): void
     {
-        $dt = Carbon::now();
-
         $response = $this->post('/api/tasks/999', [
             'title' => 'title',
-            'completed_at' => $dt->toString(),
+            'completed_at' => false,
             'position' => 3
         ]);
 
         $response->assertStatus(404);
+    }
+
+    /**
+     * Update a task successfully, move task down.
+     */
+    public function test_update_task_successful_move_down(): void
+    {
+        $response = $this->post('/api/tasks/1', [
+            'title' => 'title',
+            'completed' => true,
+            'position' => 3
+        ]);
+
+        $response = $this->get('/api/tasks/1');
+        $tasks = json_decode($response->getContent(), true);
+
+        $this->assertEquals(2, $tasks["data"][0]['id']);
+        $this->assertEquals(1, $tasks["data"][0]['position']);
+        $this->assertEquals(3, $tasks["data"][1]['id']);
+        $this->assertEquals(2, $tasks["data"][1]['position']);
+        $this->assertEquals(1, $tasks["data"][2]['id']);
+        $this->assertEquals(3, $tasks["data"][2]['position']);
+
+        $response->assertStatus(200);
+    }
+
+    /**
+     * Update a task successfully, move task up.
+     */
+    public function test_update_task_successful_move_up(): void
+    {
+        $response = $this->post('/api/tasks/3', [
+            'title' => 'title',
+            'completed' => true,
+            'position' => 1
+        ]);
+
+        $response = $this->get('/api/tasks/1');
+        $tasks = json_decode($response->getContent(), true);
+
+        $this->assertEquals(3, $tasks["data"][0]['id']);
+        $this->assertEquals(1, $tasks["data"][0]['position']);
+        $this->assertEquals(1, $tasks["data"][1]['id']);
+        $this->assertEquals(2, $tasks["data"][1]['position']);
+        $this->assertEquals(2, $tasks["data"][2]['id']);
+        $this->assertEquals(3, $tasks["data"][2]['position']);
+
+        $response->assertStatus(200);
     }
 
     /**

@@ -109,23 +109,25 @@ class TaskController extends Controller
 
             $task->title = $request->title ?? $task->title;
 
-            if ($request->position) {
+            if ($request->position && $request->position != $task->position) {
                 if ($request->position < 1) {
                     return response()->json(
                         new ApiResponse(400, "Position must be greater than 0"),
                         400
                     );
                 }
-                $task->position = $request->position ?? $task->position;
+                $oldPosition = $task->position;
+                $task->position = $request->position;
 
                 // update position of other tasks
                 $tasksToUpdate = Task::query()
                     ->where('user_id', $task->user_id)
-                    ->where('position', '>=', $task->position)
+                    ->where('position', $task->position > $oldPosition ? '<=' : '>=', $request->position)
+                    ->where('position', $task->position > $oldPosition ? '>' : '<', $oldPosition)
                     ->where('id', '!=', $task->id)
                     ->get();
                 foreach ($tasksToUpdate as $taskToUpdate) {
-                    $taskToUpdate->position = $taskToUpdate->position + 1;
+                    $taskToUpdate->position = $taskToUpdate->position + ($task->position > $oldPosition ? -1 : 1);
                     $taskToUpdate->save();
                 }
             }

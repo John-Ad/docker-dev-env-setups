@@ -43,11 +43,10 @@ const getAllTasks = async () => {
 
 const handleDragChange = async (elem: any) => {
     const {moved} = elem;
-    const {element, oldIndex, newIndex} = moved;
-    const taskInOldPosition = tasks.value[oldIndex];
+    const {element, newIndex} = moved;
     const taskInNewPosition = tasks.value[newIndex];
 
-    const result = await updateTask(taskInOldPosition.id, undefined, undefined, taskInNewPosition.position, undefined);
+    const result = await updateTask(element.id, undefined, undefined, taskInNewPosition.position, undefined);
     if (result)
         return;
 
@@ -91,7 +90,7 @@ onUpdated(() => {
         <v-progress-linear color="primary" v-if="loadingTasks" indeterminate></v-progress-linear>
         <v-list>
             <draggable
-                    v-model="tasks"
+                    v-model="tasksToDisplay"
                     item-key="id"
                     @change="handleDragChange"
             >
