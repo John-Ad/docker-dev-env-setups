@@ -3,6 +3,9 @@
 import {useRouter} from "vue-router";
 import {ref} from "vue";
 import {AuthApi} from "../api/authApi.ts";
+import {useStore} from "../store/main.ts";
+
+const store = useStore();
 
 const router = useRouter();
 const email = ref("");
@@ -18,6 +21,8 @@ const login = async () => {
     let result = await AuthApi.login(email.value, password.value);
     if (result === 0)
         return;
+
+    store.commit("login", result);
 
     await router.push("/home");
 }

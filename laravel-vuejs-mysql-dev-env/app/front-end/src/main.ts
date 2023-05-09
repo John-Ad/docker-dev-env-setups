@@ -5,6 +5,7 @@ import {createRouter, createWebHistory} from "vue-router";
 import Home from "./views/Home.vue";
 import Login from "./views/Login.vue";
 import Register from "./views/Register.vue";
+import {key, store} from "./store/main";
 
 import 'vuetify/styles'
 import {createVuetify} from 'vuetify'
@@ -34,5 +35,5 @@ const router = createRouter({
     ]
 })
 
-createApp(App).use(vuetify).use(router).mount('#app')
+createApp(App).use(vuetify).use(router).use(store, key).mount('#app')
 

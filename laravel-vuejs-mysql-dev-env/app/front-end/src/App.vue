@@ -17,7 +17,7 @@ import Navbar from "./components/Navbar.vue";
     width: 100vw;
     padding-left: 4rem;
     padding-right: 4rem;
-    margin: 5rem 0 0;
+    margin: 8rem 0 0;
 }
 
 </style>

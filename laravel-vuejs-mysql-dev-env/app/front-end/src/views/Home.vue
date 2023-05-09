@@ -4,6 +4,9 @@ import {onMounted, onUpdated, ref} from "vue";
 import draggable from "vuedraggable";
 import {ITask, TasksApi} from "../api/tasksApi.ts";
 import Task from "../components/Task.vue";
+import {useStore} from "../store/main.ts";
+
+const store = useStore();
 
 const loadingTasks = ref(false);
 const addingTask = ref(false);
@@ -12,9 +15,10 @@ const newTaskTitle = ref("");
 const tasks = ref<ITask[]>([]);
 const tasksToDisplay = ref<ITask[]>([]);
 
+
 const addTask = async () => {
     addingTask.value = true;
-    const result = await TasksApi.add(5, newTaskTitle.value);
+    const result = await TasksApi.add(store.getters.userId, newTaskTitle.value);
     addingTask.value = false;
     if (!result)
         return;
@@ -35,7 +39,7 @@ const updateTask = async (id: number, title?: string, description?: string, posi
 
 const getAllTasks = async () => {
     loadingTasks.value = true;
-    const data = await TasksApi.getAllForUser(5);
+    const data = await TasksApi.getAllForUser(store.getters.userId);
     tasks.value = data;
     tasksToDisplay.value = data;
     loadingTasks.value = false;
