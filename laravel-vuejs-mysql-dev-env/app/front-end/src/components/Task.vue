@@ -62,7 +62,7 @@ const editTitle = async () => {
 
 const setTaskStatus = async (completed: boolean) => {
     settingTaskStatus.value = true;
-    const result = await updateTask(props.task.id, undefined, undefined, undefined, completed);
+    await updateTask(props.task.id, undefined, undefined, undefined, completed);
     settingTaskStatus.value = false;
 }
 
