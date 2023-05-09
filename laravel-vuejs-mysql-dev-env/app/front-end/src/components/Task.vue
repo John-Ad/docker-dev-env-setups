@@ -19,6 +19,8 @@ const newTitle = ref(props.task.title);
 const editingTitle = ref(false);
 const savingTitle = ref(false);
 
+const settingTaskStatus = ref(false);
+
 
 const deleteTask = async () => {
     if (!confirm("Are you sure you want to delete this task?"))
@@ -58,22 +60,35 @@ const editTitle = async () => {
     editingTitle.value = false;
 }
 
+const setTaskStatus = async (completed: boolean) => {
+    settingTaskStatus.value = true;
+    const result = await updateTask(props.task.id, undefined, undefined, undefined, completed);
+    settingTaskStatus.value = false;
+}
+
 </script>
 
 <template>
-    <v-container class="task-container">
+    <v-container class="task-container" :class="task.completed_at!==null && 'task-complete'">
         <v-row no-gutters class="task-row">
             <v-col cols="1">
-                <v-btn elevation="0" :icon="mdiDragVertical"></v-btn>
+                <v-btn elevation="0" :icon="mdiDragVertical"
+                       :class="task.completed_at!==null && 'btn-completed'"></v-btn>
             </v-col>
             <v-col cols="4">
-                <p>{{ task.title }}</p>
+                <p v-if="!settingTaskStatus">{{ task.title }}</p>
+                <v-progress-circular color="primary" v-if="settingTaskStatus" indeterminate></v-progress-circular>
             </v-col>
             <v-col>
-                <v-btn elevation="0" :icon="mdiPencil" class="edit-btn" @click="editingTitle=true"></v-btn>
-                <v-btn elevation="0" :icon="mdiTrashCanOutline" class="delete-btn" @click="deleteTask"></v-btn>
-                <v-btn elevation="0" :icon="mdiCheckboxBlankOutline" v-if="task.completed_at===null"></v-btn>
-                <v-btn elevation="0" :icon="mdiCheckboxMarkedOutline" v-if="task.completed_at!==null"></v-btn>
+                <v-btn elevation="0" :icon="mdiPencil" class="edit-btn"
+                       :class="task.completed_at!==null && 'btn-completed'" @click="editingTitle=true"></v-btn>
+                <v-btn elevation="0" :icon="mdiTrashCanOutline" class="delete-btn"
+                       :class="task.completed_at!==null && 'btn-completed'" @click="deleteTask"></v-btn>
+                <v-btn elevation="0" :icon="mdiCheckboxBlankOutline" v-if="task.completed_at===null"
+                       @click="setTaskStatus(true)"></v-btn>
+                <v-btn elevation="0" :icon="mdiCheckboxMarkedOutline"
+                       class="btn-completed" v-if="task.completed_at!==null"
+                       @click="setTaskStatus(false)"></v-btn>
 
                 <v-dialog v-model="editingTitle" max-width="500px">
                     <v-card>
@@ -103,6 +118,12 @@ const editTitle = async () => {
     padding: 1rem 0;
 }
 
+.task-complete {
+    text-decoration: line-through;
+    background-color: #2ca02c;
+    opacity: 0.5;
+}
+
 .task-row {
     width: 1000px;
     align-items: center;
@@ -113,7 +134,11 @@ const editTitle = async () => {
 }
 
 .edit-btn {
-    color: #17a2b8;
+    color: #1a202c;
+}
+
+.btn-completed {
+    background-color: #2ca02c;
 }
 
 </style>

@@ -132,7 +132,8 @@ class TaskController extends Controller
                 }
             }
 
-            if ($request->completed) {
+            // check if completed is set
+            if ($request->completed !== null) {
                 $task->completed_at = $request->completed == true ? now() : null;
             }
 
