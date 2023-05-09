@@ -6,7 +6,7 @@ export interface ITask {
     title: string;
     description?: string;
     position?: number;
-    completed_at?: string;
+    completed_at?: string | null;
 }
 
 export class TasksApi {

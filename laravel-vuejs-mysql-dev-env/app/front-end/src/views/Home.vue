@@ -95,7 +95,7 @@ onUpdated(() => {
                     @change="handleDragChange"
             >
                 <template #item="{ element }">
-                    <Task :task="element"/>
+                    <Task :task="element" :refreshTasks="getAllTasks"/>
                 </template>
             </draggable>
         </v-list>
