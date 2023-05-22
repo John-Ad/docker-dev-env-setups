@@ -1,5 +1,6 @@
 "use client"
 
+import { signIn } from "next-auth/react";
 import React, { useState } from "react";
 
 export default function SignInPage(
@@ -14,15 +15,28 @@ export default function SignInPage(
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
 
-    const signIn = () => {
-        console.log("Signing in...");
+    const login = async () => {
+        if (username === "" || password === "") {
+            alert("Please fill in all fields");
+            return;
+        }
+
+        let res = await signIn("credentials", {
+            username,
+            password,
+            redirect: false,
+        });
+        console.log(res);
     }
 
 
     return (
         <div className="min-h-screen min-w-full">
             <h1 className="ml-[auto] mr-[auto] text-center text-3xl mb-4">Sign In:</h1>
-            <form className="flex bg-slate-100 rounded shadow p-10 flex-col items-center center w-[300px] ml-[auto] mr-[auto]">
+            <form className="flex bg-slate-100 rounded shadow p-10 flex-col items-center center w-[300px] ml-[auto] mr-[auto]" onSubmit={(e) => {
+                e.preventDefault();
+                login();
+            }}>
                 <label className="p-2 pt-0" htmlFor="username">Email</label>
                 <input className="required focus:ring-3 border rounded" onChange={(e) => {
                     setUsername(e.target.value);
@@ -32,7 +46,7 @@ export default function SignInPage(
                     setPassword(e.target.value);
                 }} type="password" id="password" name="password" value={password} placeholder="****" />
 
-                <button className=" mt-4 pl-5 pr-5 pt-1 pb-1 text-white rounded-full bg-orange-500">Sign in</button>
+                <button formAction="submit" className=" mt-4 pl-5 pr-5 pt-1 pb-1 text-white rounded-full bg-orange-500">Sign in</button>
             </form>
         </div>
     );
