@@ -6,10 +6,18 @@ services:
       context: .
       dockerfile: app.Dockerfile
     ports:
-      - "8080:8080"
       - "3000:3000"
     volumes:
       - ./app:/app
+
+  admin-app:
+    build:
+      context: .
+      dockerfile: adminApp.Dockerfile
+    ports:
+      - "3001:3000"
+    volumes:
+      - ./admin-app:/admin-app
 
   mongo-db:
     image: mongo:latest

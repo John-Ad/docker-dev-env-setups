@@ -8,8 +8,19 @@ if [[ $PWD == '/' ]]; then
     exit 1
 fi
 
+dockerContainerName="nextjs-mongodb-app-1"
+
+# check if --a is passed as argument
+if [[ $1 == "--a" ]]; then
+    dockerContainerName="nextjs-mongodb-admin-app-1"
+fi
+
+
+echo "Entering shell of docker container with name $dockerContainerName"
+
+
 # get id of docker container with name laravel-vuejs-mysql-dev-env-app
-containerId=$(docker ps -aqf "name=nextjs-mongodb-app-1")
+containerId=$(docker ps -aqf "name=$dockerContainerName")
 
 # enter shell of docker container with id $containerId using bash
 docker exec -it $containerId bash
