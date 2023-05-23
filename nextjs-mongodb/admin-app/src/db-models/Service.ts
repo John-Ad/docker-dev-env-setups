@@ -4,11 +4,14 @@ import mongoose from "mongoose";
 const Schema = mongoose.Schema;
 const ObjectId = Schema.Types.ObjectId;
 
-const Service = new Schema({
+const ServiceSchema = new Schema({
     id: ObjectId,
     title: String,
     description: String,
     price: Number,
 });
 
-export default mongoose.model("service", Service);
+
+const Service = mongoose.models.service || mongoose.model("service", ServiceSchema);
+
+export default Service;

@@ -1,5 +1,4 @@
-import def from "../db";
-import User from "@/db-models/User";
+import { User } from "../db";
 import jwt from "jsonwebtoken";
 
 export const signIn = async (username: string, password: string): Promise<string> => {
