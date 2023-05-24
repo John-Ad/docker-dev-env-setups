@@ -1,8 +1,9 @@
 import NextAuth from "next-auth"
 import CredentialsProvider from "next-auth/providers/credentials"
-import { signIn } from "@/utils/auth/main";
+import { signIn } from "@/utils/auth/auth";
 
 const handler = NextAuth({
+    secret: "secret",
     providers: [
         CredentialsProvider({
             name: "Credentials",
@@ -12,6 +13,8 @@ const handler = NextAuth({
             },
             async authorize(credentials, req) {
                 const token = await signIn(credentials?.username as string, credentials?.password as string);
+
+                console.log("#####  TOKEN: ", token);
 
                 if (token) {
                     return {

@@ -37,11 +37,11 @@ export default function SignInPage(
                 e.preventDefault();
                 login();
             }}>
-                <label className="p-2 pt-0" htmlFor="username">Email</label>
+                <label className="p-2 pt-0" htmlFor="username">Username:</label>
                 <input className="required focus:ring-3 border rounded" onChange={(e) => {
                     setUsername(e.target.value);
-                }} type="text" id="username" name="username" value={username} placeholder="example@gmail.com" />
-                <label className="mt-5 p-2" htmlFor="password">Password</label>
+                }} type="text" id="username" name="username" value={username} placeholder="exampleUser" />
+                <label className="mt-5 p-2" htmlFor="password">Password:</label>
                 <input className="required border rounded" onChange={(e) => {
                     setPassword(e.target.value);
                 }} type="password" id="password" name="password" value={password} placeholder="****" />

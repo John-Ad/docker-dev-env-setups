@@ -3,33 +3,59 @@
 import { BsList } from "react-icons/all";
 import { useState } from "react";
 import Link from "next/link";
-import { useSession } from "next-auth/react";
-import { redirect } from "next/navigation";
+import { signOut, useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 
 export const Navbar = () => {
 
   const [menuOpen, setMenuOpen] = useState(false);
 
-  // const { data: session } = useSession({
-  //   required: true,
-  //   onUnauthenticated() {
-  //     // Redirecting...
-  //     redirect("/signin");
-  //   }
-  // })
+  const { data: session, status } = useSession();
+  const router = useRouter();
 
   return (
     <nav className="mb-10 p-9 flex flex-row justify-between items-center min-w-[100vw]">
-      <img className="w-20 h-20 rounded-full"
+      <img
+        className="w-20 h-20 rounded-full"
         src="https://images.unsplash.com/photo-1567446537708-ac4aa75c9c28?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1287&q=80"
         alt="" />
       <h2 className="hidden sm:inline">A title</h2>
       <div className="hidden lg:inline">
-        <ul className="flex flex-row justify-evenly min-w-[60vw]">
-          <li>Home</li>
-          <li>Services</li>
-          <li>About</li>
-          <li>Contact Us</li>
+        <ul className="flex flex-row justify-evenly items-center min-w-[60vw]">
+          <li>
+            <Link href="/">Home</Link>
+          </li>
+          <li>
+            <Link href={{ pathname: "/services" }} >Services</Link>
+          </li>
+          <li>
+            <Link href={{ pathname: "/about" }} >About</Link>
+          </li>
+          <li>
+            <Link href={{ pathname: "/contact-us" }} >Contact Us</Link>
+          </li>
+
+          {
+            status !== "authenticated" &&
+
+            <button className="bg-emerald-600 p-3 rounded text-white" onClick={() => {
+              router.push("/signin");
+            }}>
+              Sign In
+            </button>
+          }
+          {
+            status === "authenticated" &&
+            <li>
+              <button className="bg-slate-700 p-3 rounded text-white" onClick={() => {
+                signOut({ redirect: false });
+                router.push("/signin");
+              }}>
+                Logout
+              </button>
+            </li>
+          }
+
         </ul>
       </div>
 
@@ -44,16 +70,16 @@ export const Navbar = () => {
             className="absolute flex flex-col justify-evenly z-[1000] right-0 p-3 mt-9 mr-2 min-w-max list-none overflow-hidden rounded-lg border-none bg-white bg-clip-padding text-left text-base shadow-lg"
           >
             <li>
-              <Link href="/admin">Home</Link>
+              <Link href="/">Home</Link>
             </li>
             <li>
-              <Link href="/services">Services</Link>
+              <Link href={{ pathname: "/services" }} >Services</Link>
             </li>
             <li>
-              <Link href="/about">About</Link>
+              <Link href={{ pathname: "/about" }} >About</Link>
             </li>
             <li>
-              <Link href="/contact-us">Contact Us</Link>
+              <Link href={{ pathname: "/contact-us" }} >Contact Us</Link>
             </li>
           </ul>
         }

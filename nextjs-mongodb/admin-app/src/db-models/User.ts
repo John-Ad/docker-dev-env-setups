@@ -10,6 +10,6 @@ const UserSchema = new Schema({
     password: String,
 });
 
-const User = mongoose.models["user"] || mongoose.model("user", UserSchema);
+const User = mongoose.models["users"] || mongoose.model("users", UserSchema);
 
 export default User;
