@@ -37,3 +37,21 @@ export async function POST(req: Request) {
 
     return NextResponse.json(200);
 }
+
+export async function DELETE(req: NextRequest) {
+    const session = await getServerSession(authOptions);
+
+    if (!session) {
+        console.log("not authenticated");
+        return NextResponse.json(401);
+    }
+
+    let id = req.nextUrl.searchParams.get("id");
+
+    let result = await Service.deleteOne({ _id: id });
+    if (result.deletedCount === 0) {
+        return NextResponse.json(500);
+    }
+
+    return NextResponse.json(200);
+}

@@ -79,6 +79,23 @@ export const Services = () => {
         getServices();
     }
 
+    const deleteService = async (id: string) => {
+        let res = await fetch(`/api/services?id=${id}`, {
+            method: "DELETE",
+            headers: {
+                "Content-Type": "application/json",
+            },
+        });
+
+        if (res.status !== 200) {
+            alert("Error deleting service");
+            return;
+        }
+
+        alert("Service deleted");
+        getServices();
+    }
+
     return (
         <div className="pl-5 pr-5 flex flex-col justify-evenly items center">
             <h1 className="text-center mb-3 text-2xl bold">Services:</h1>
@@ -106,7 +123,9 @@ export const Services = () => {
                                         <BsPencilSquare />
                                     </td>
                                     <td align="center">
-                                        <BsTrash />
+                                        <button onClick={() => deleteService(service._id)} className=" hover:text-red-500 text-red-700">
+                                            <BsTrash />
+                                        </button>
                                     </td>
                                 </tr>
                             );
