@@ -6,7 +6,7 @@ const ObjectId = Schema.Types.ObjectId;
 
 const ServiceSchema = new Schema({
     id: ObjectId,
-    title: String,
+    name: String,
     description: String,
     price: Number,
 });

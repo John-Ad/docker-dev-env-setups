@@ -1,8 +1,5 @@
-"use client"
+import { Services } from "@/components/services/services";
 
-import { useSession } from "next-auth/react";
-import { useRouter } from "next/navigation";
-import { useEffect } from "react";
 
 export default function AdminPage(
   {
@@ -13,19 +10,14 @@ export default function AdminPage(
     searchParams: { [key: string]: string | string[] | undefined };
   }) {
 
-  const router = useRouter();
-  const { data: session, status } = useSession();
 
 
-  useEffect(() => {
+  return (
+    <div className="min-w-full">
+      <h1>Dashboard</h1>
 
-    console.log(status);
+      <Services />
 
-    if (status !== "loading" && status !== "authenticated") {
-      router.push("/signin");
-    }
-
-  }, [status]);
-
-  return <h1>My Page</h1>;
+    </div>
+  );
 }

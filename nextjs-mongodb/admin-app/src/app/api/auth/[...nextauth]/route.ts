@@ -2,7 +2,7 @@ import NextAuth from "next-auth"
 import CredentialsProvider from "next-auth/providers/credentials"
 import { signIn } from "@/utils/auth/auth";
 
-const handler = NextAuth({
+export const authOptions = {
     secret: "secret",
     providers: [
         CredentialsProvider({
@@ -20,6 +20,8 @@ const handler = NextAuth({
                     return {
                         id: "user_id", // Add a dummy value for the 'id' field
                         username: credentials?.username as string,
+                        name: "name",
+                        email: "email@email.com",
                         token: token,
                     };
                 }
@@ -30,6 +32,8 @@ const handler = NextAuth({
     pages: {
         signIn: "/signin",
     }
-});
+}
+
+const handler = NextAuth(authOptions);
 
 export { handler as GET, handler as POST }

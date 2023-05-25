@@ -19,20 +19,11 @@ export const Navbar = () => {
         className="w-20 h-20 rounded-full"
         src="https://images.unsplash.com/photo-1567446537708-ac4aa75c9c28?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1287&q=80"
         alt="" />
-      <h2 className="hidden sm:inline">A title</h2>
-      <div className="hidden lg:inline">
-        <ul className="flex flex-row justify-evenly items-center min-w-[60vw]">
+      <h1 className="hidden sm:inline text-orange-600 font-bold">Company Name</h1>
+      <div className="hidden lg:inline ml-[40px]">
+        <ul className="flex flex-row justify-between items-center min-w-[50vw]">
           <li>
-            <Link href="/">Home</Link>
-          </li>
-          <li>
-            <Link href={{ pathname: "/services" }} >Services</Link>
-          </li>
-          <li>
-            <Link href={{ pathname: "/about" }} >About</Link>
-          </li>
-          <li>
-            <Link href={{ pathname: "/contact-us" }} >Contact Us</Link>
+            <Link href="/">Dashboard</Link>
           </li>
 
           {
@@ -67,20 +58,31 @@ export const Navbar = () => {
         {
           menuOpen &&
           <ul
-            className="absolute flex flex-col justify-evenly z-[1000] right-0 p-3 mt-9 mr-2 min-w-max list-none overflow-hidden rounded-lg border-none bg-white bg-clip-padding text-left text-base shadow-lg"
+            className="absolute flex flex-col justify-between z-[1000] right-0 p-3 mt-9 mr-2 min-w-max list-none overflow-hidden rounded-lg border-none bg-white bg-clip-padding text-left text-base shadow-lg"
           >
             <li>
-              <Link href="/">Home</Link>
+              <Link href="/">Dashboard</Link>
             </li>
-            <li>
-              <Link href={{ pathname: "/services" }} >Services</Link>
-            </li>
-            <li>
-              <Link href={{ pathname: "/about" }} >About</Link>
-            </li>
-            <li>
-              <Link href={{ pathname: "/contact-us" }} >Contact Us</Link>
-            </li>
+            {
+              status !== "authenticated" &&
+
+              <button className="bg-emerald-600 p-3 rounded text-white" onClick={() => {
+                router.push("/signin");
+              }}>
+                Sign In
+              </button>
+            }
+            {
+              status === "authenticated" &&
+              <li>
+                <button className="bg-slate-700 p-3 rounded text-white" onClick={() => {
+                  signOut({ redirect: false });
+                  router.push("/signin");
+                }}>
+                  Logout
+                </button>
+              </li>
+            }
           </ul>
         }
       </div>

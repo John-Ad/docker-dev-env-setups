@@ -1,6 +1,7 @@
 "use client"
 
 import { signIn } from "next-auth/react";
+import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 
 export default function SignInPage(
@@ -15,6 +16,8 @@ export default function SignInPage(
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
 
+    const router = useRouter();
+
     const login = async () => {
         if (username === "" || password === "") {
             alert("Please fill in all fields");
@@ -26,7 +29,19 @@ export default function SignInPage(
             password,
             redirect: false,
         });
-        console.log(res);
+
+        if (!res) {
+            alert("An error occurred");
+            return;
+        }
+
+        // check if the response is an error
+        if (res.error) {
+            alert(res.error);
+            return;
+        }
+
+        router.push("/");
     }
 
 
