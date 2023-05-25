@@ -55,3 +55,23 @@ export async function DELETE(req: NextRequest) {
 
     return NextResponse.json(200);
 }
+
+export async function PUT(req: Request) {
+    const session = await getServerSession(authOptions);
+
+    if (!session) {
+        console.log("not authenticated");
+        return NextResponse.json(401);
+    }
+
+    let data: IService = await req.json();
+    console.log(data);
+
+    // update the service
+    let result = await Service.updateOne({ _id: data._id }, data);
+    if (result.modifiedCount === 0) {
+        return NextResponse.json(500);
+    }
+
+    return NextResponse.json(200);
+}
