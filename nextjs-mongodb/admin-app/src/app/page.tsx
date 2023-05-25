@@ -14,7 +14,6 @@ export default function AdminPage(
 
   return (
     <div className="min-w-full">
-      <h1>Dashboard</h1>
 
       <Services />
 

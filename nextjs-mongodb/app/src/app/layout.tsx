@@ -1,8 +1,9 @@
+import { Navbar } from '@/components/nav-bar/navbar';
 import './globals.css'
-import {Inter} from 'next/font/google'
+import { Inter } from 'next/font/google'
 import React from "react";
 
-const inter = Inter({subsets: ['latin']})
+const inter = Inter({ subsets: ['latin'] })
 
 export const metadata = {
   title: 'NextJs',
@@ -17,7 +18,15 @@ export default function RootLayout(
   }) {
   return (
     <html lang="en">
-    <body className={inter.className}>{children}</body>
+      <body className={inter.className}>
+        <main>
+          <div className="flex flex-col min-h-screen">
+            <Navbar />
+
+            {children}
+          </div>
+        </main>
+      </body>
     </html>
   )
 }
