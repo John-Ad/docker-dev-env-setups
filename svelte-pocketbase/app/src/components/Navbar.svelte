@@ -17,5 +17,6 @@
     nav {
         padding-left: 3rem;
         padding-right: 3rem;
+        border-bottom: 1px solid #ccc;
     }
 </style>
