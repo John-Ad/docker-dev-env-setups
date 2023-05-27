@@ -1,4 +1,5 @@
 <script lang="ts">
+    import { Trash } from "svelte-bootstrap-icons";
     import pb from "../api/pb";
     import type { IPost } from "../interfaces/interfaces";
 
@@ -42,11 +43,30 @@
             alert("Failed to dislike post");
         }
     };
+
+    const deletePost = async () => {
+        if (post.userId !== pb.authStore.model.id) {
+            alert("Not your post!");
+            return;
+        }
+        try {
+            await pb.collection("posts").delete(post.id);
+            refresh();
+        } catch (e) {
+            console.log(e);
+            alert("Failed to delete post");
+        }
+    };
 </script>
 
 <article class="post">
     <header>
         {post.created.substring(0, 19)}
+        {#if post.userId === pb.authStore.model.id}
+            <button class="del-btn" on:click={deletePost}>
+                <Trash width={24} height={24} fill="red" />
+            </button>
+        {/if}
     </header>
     {post.message}
     <footer>
@@ -76,5 +96,19 @@
 
     button {
         width: 200px;
+    }
+
+    header {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .del-btn {
+        width: fit-content;
+        height: fit-content;
+        background-color: white;
+        border: none;
     }
 </style>
