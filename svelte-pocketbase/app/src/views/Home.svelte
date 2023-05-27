@@ -66,7 +66,7 @@
     </div>
     <div class="post-list">
         {#each posts as post}
-            <Post {post} />
+            <Post {post} refresh={getPosts} />
         {/each}
         {#if posts.length === 0}
             <h4 class="no-posts-message">No posts</h4>
