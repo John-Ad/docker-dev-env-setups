@@ -10,14 +10,20 @@
     let postContent = "";
 
     const getPosts = async () => {
-        const posts = await pb.collection("posts").getFullList({
+        const retrievedPosts = await pb.collection("posts").getFullList({
             sort: "-created",
         });
-        console.log(posts);
+        posts = retrievedPosts.map((p) => {
+            return p as any;
+        });
     };
 
     const addPost = async (event: Event) => {
         event.preventDefault();
+        if (postContent === "") {
+            alert("Please enter a message");
+            return;
+        }
 
         try {
             const post = await pb.collection("posts").create({
@@ -27,8 +33,11 @@
                 dislikes: [],
             });
             console.log(post);
+            addingPost = false;
+            postContent = "";
             getPosts();
         } catch (e) {
+            console.log(e);
             alert("Failed to add post");
         }
     };
@@ -60,13 +69,21 @@
                 <h2>{post.message}</h2>
             </div>
         {/each}
+        {#if posts.length === 0}
+            <h4 class="no-posts-message">No posts</h4>
+        {/if}
     </div>
 
     {#if addingPost}
-        <dialog>
+        <dialog open>
             <article>
                 <header>
-                    <a href="#close" aria-label="Close" class="close" />
+                    <a
+                        on:click={() => (addingPost = false)}
+                        href="#close"
+                        aria-label="Close"
+                        class="close"
+                    />
                     New Post
                 </header>
                 <form on:submit={(e) => addPost(e)}>
@@ -109,5 +126,10 @@
         flex-direction: row;
         align-items: center;
         justify-content: space-between;
+        border-bottom: 1px solid #ccc;
+        margin-bottom: 1rem;
+    }
+    .no-posts-message {
+        padding-top: 40px;
     }
 </style>
