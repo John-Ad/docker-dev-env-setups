@@ -4,6 +4,7 @@
     import type { IPost } from "../interfaces/interfaces";
     import { push } from "svelte-spa-router";
     import { PlusCircle } from "svelte-bootstrap-icons";
+    import Post from "../components/Post.svelte";
 
     let posts: IPost[] = [];
     let addingPost = false;
@@ -65,9 +66,7 @@
     </div>
     <div class="post-list">
         {#each posts as post}
-            <div class="post">
-                <h2>{post.message}</h2>
-            </div>
+            <Post {post} />
         {/each}
         {#if posts.length === 0}
             <h4 class="no-posts-message">No posts</h4>
@@ -121,7 +120,7 @@
         width: fit-content;
     }
     .posts-header {
-        width: 300px;
+        width: 500px;
         display: flex;
         flex-direction: row;
         align-items: center;
