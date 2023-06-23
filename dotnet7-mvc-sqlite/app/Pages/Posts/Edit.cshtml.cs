@@ -6,17 +6,17 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using app.Data;
-using app.Models;
+using App.Data;
+using App.Models;
 using Microsoft.AspNetCore.Authorization;
 
-namespace app.Pages.Posts;
+namespace App.Pages.Posts;
 [Authorize(Roles = "User")]
 public class EditModel : PageModel
 {
-    private readonly app.Data.ApplicationDbContext _context;
+    private readonly App.Data.ApplicationDbContext _context;
 
-    public EditModel(app.Data.ApplicationDbContext context)
+    public EditModel(App.Data.ApplicationDbContext context)
     {
         _context = context;
     }

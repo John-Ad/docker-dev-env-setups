@@ -1,5 +1,5 @@
 
-namespace app.Models;
+namespace App.Models;
 
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -17,14 +17,14 @@ public class Post
     [Required]
     public string Content { get; set; }
 
-    [Required]
     [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
-    public DateTime CreatedAt { get; set; }
+    public DateTime? CreatedAt { get; set; }
 
-    [Required]
     [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
-    public DateTime UpdatedAt { get; set; }
+    public DateTime? UpdatedAt { get; set; }
 
-    [ForeignKey("UserId")]
+    [ForeignKey(nameof(IdentityUser))]
+    public string UserId { get; set; }
+
     public IdentityUser User { get; set; }
 }

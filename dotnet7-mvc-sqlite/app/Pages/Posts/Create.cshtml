@@ -1,8 +1,11 @@
 @page
-@model app.Pages.Posts.CreateModel
+@model App.Pages.Posts.CreateModel
+
 
 @{
     ViewData["Title"] = "Create";
+
+    var userId = userManager.GetUserId(User);
 }
 
 <h1>Create</h1>
@@ -12,16 +15,19 @@
 <div class="row">
     <div class="col-md-4">
         <form method="post">
+
+            <input type="hidden" asp-for="inputPost.UserId" value="@userId" />
+
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
-                <label asp-for="Post.Title" class="control-label"></label>
-                <input asp-for="Post.Title" class="form-control" />
-                <span asp-validation-for="Post.Title" class="text-danger"></span>
+                <label asp-for="inputPost.Title" class="control-label"></label>
+                <input asp-for="inputPost.Title" class="form-control" />
+                <span asp-validation-for="inputPost.Title" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Post.Content" class="control-label"></label>
-                <input asp-for="Post.Content" class="form-control" />
-                <span asp-validation-for="Post.Content" class="text-danger"></span>
+                <label asp-for="inputPost.Content" class="control-label"></label>
+                <input asp-for="inputPost.Content" class="form-control" />
+                <span asp-validation-for="inputPost.Content" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />
@@ -35,5 +41,7 @@
 </div>
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 }

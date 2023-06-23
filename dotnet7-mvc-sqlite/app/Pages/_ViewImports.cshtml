@@ -1,5 +1,6 @@
 ﻿@using Microsoft.AspNetCore.Identity
-@using app
-@using app.Data
-@namespace app.Pages
+@using App
+@using App.Data
+@inject UserManager<IdentityUser> userManager
+@namespace App.Pages
 @addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers

@@ -7,5 +7,5 @@ read model
 echo "Enter Model plural name: "
 read model_plural
 
-dotnet-aspnet-codegenerator razorpage -m $model -dc app.Data.ApplicationDbContext -udl -outDir Pages/$model_plural --referenceScriptLibraries --databaseProvider sqlite
+dotnet-aspnet-codegenerator razorpage -m $model -dc App.Data.ApplicationDbContext -udl -outDir Pages/$model_plural --referenceScriptLibraries --databaseProvider sqlite
 

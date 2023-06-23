@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace app.Data.Migrations
+namespace App.Data.Migrations
 {
     /// <inheritdoc />
     public partial class addedPostsTable : Migration

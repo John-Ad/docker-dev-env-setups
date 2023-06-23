@@ -5,7 +5,7 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <UserSecretsId>aspnet-app-a4714856-e550-48eb-9743-42c15a713586</UserSecretsId>
-        <RootNamespace>app</RootNamespace>
+        <RootNamespace>App</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>

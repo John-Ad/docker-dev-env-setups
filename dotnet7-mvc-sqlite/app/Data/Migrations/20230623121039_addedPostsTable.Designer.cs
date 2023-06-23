@@ -4,11 +4,11 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using app.Data;
+using App.Data;
 
 #nullable disable
 
-namespace app.Data.Migrations
+namespace App.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
     [Migration("20230623121039_addedPostsTable")]

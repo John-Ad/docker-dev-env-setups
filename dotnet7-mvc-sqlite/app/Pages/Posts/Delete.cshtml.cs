@@ -5,18 +5,18 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
-using app.Data;
-using app.Models;
+using App.Data;
+using App.Models;
 using Microsoft.AspNetCore.Authorization;
 
-namespace app.Pages.Posts;
+namespace App.Pages.Posts;
 
-[Authorize(Roles = "User")]
+[Authorize(Roles = "Admin")]
 public class DeleteModel : PageModel
 {
-    private readonly app.Data.ApplicationDbContext _context;
+    private readonly App.Data.ApplicationDbContext _context;
 
-    public DeleteModel(app.Data.ApplicationDbContext context)
+    public DeleteModel(App.Data.ApplicationDbContext context)
     {
         _context = context;
     }
