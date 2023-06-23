@@ -22,7 +22,14 @@ public class EditModel : PageModel
     }
 
     [BindProperty]
-    public Post Post { get; set; } = default!;
+    public InputPost newPost { get; set; } = default!;
+
+    public class InputPost
+    {
+        public int Id { get; set; }
+        public string Title { get; set; } = default!;
+        public string Content { get; set; } = default!;
+    }
 
     public async Task<IActionResult> OnGetAsync(int? id)
     {
@@ -36,7 +43,12 @@ public class EditModel : PageModel
         {
             return NotFound();
         }
-        Post = post;
+        newPost = new InputPost
+        {
+            Id = post.Id,
+            Title = post.Title,
+            Content = post.Content
+        };
         return Page();
     }
 
@@ -46,18 +58,47 @@ public class EditModel : PageModel
     {
         if (!ModelState.IsValid)
         {
+            if (!ModelState.IsValid)
+            {
+                foreach (var modelStateKey in ModelState.Keys)
+                {
+                    var modelStateVal = ModelState[modelStateKey];
+                    if (modelStateVal?.Errors.Count > 0)
+                    {
+                        foreach (var modelError in modelStateVal.Errors)
+                        {
+                            ModelState.AddModelError(string.Empty, modelError.ErrorMessage);
+                        }
+                    }
+                }
+            }
+
             return Page();
         }
 
-        _context.Attach(Post).State = EntityState.Modified;
+        var originalPost = await _context.Post.FirstOrDefaultAsync(m => m.Id == newPost.Id);
+        if (originalPost == null)
+        {
+            return NotFound();
+        }
+
+        if (originalPost.Title == newPost.Title && originalPost.Content == newPost.Content)
+        {
+            return RedirectToPage("./Index");
+        }
+
+        originalPost.Title = newPost.Title;
+        originalPost.Content = newPost.Content;
+        originalPost.UpdatedAt = DateTime.UtcNow;
 
         try
         {
+            _context.Post.Update(originalPost);
             await _context.SaveChangesAsync();
         }
         catch (DbUpdateConcurrencyException)
         {
-            if (!PostExists(Post.Id))
+            if (!PostExists(originalPost.Id))
             {
                 return NotFound();
             }
