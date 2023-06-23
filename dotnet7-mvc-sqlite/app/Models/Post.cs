@@ -17,10 +17,10 @@ public class Post
     [Required]
     public string Content { get; set; }
 
-    [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
+    // [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
     public DateTime? CreatedAt { get; set; }
 
-    [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
+    // [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
     public DateTime? UpdatedAt { get; set; }
 
     [ForeignKey(nameof(IdentityUser))]

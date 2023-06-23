@@ -21,13 +21,14 @@ public class IndexModel : PageModel
         _context = context;
     }
 
-    public IList<Post> Post { get; set; } = default!;
+    public IList<Post> Posts { get; set; } = default!;
 
     public async Task OnGetAsync()
     {
         if (_context.Post != null)
         {
-            Post = await _context.Post.ToListAsync();
+            Posts = await _context.Post.ToListAsync();
+            Console.WriteLine("updated" + Posts[2].UpdatedAt);
         }
     }
 }
