@@ -3,6 +3,8 @@
 
 @{
     ViewData["Title"] = "Index";
+
+    var userId = userManager.GetUserId(User);
 }
 
 <h1>Index</h1>
@@ -51,12 +53,18 @@
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.UpdatedAt)
-                    @* <p>@item.UpdatedAt.ToString()</p> *@
                 </td>
                 <td>
-                    <a asp-page="./Edit" asp-route-id="@item.Id">Edit</a> |
+                    @if (userId == item.UserId)
+                    {
+                        <a asp-page="./Edit" asp-route-id="@item.Id">Edit</a>
+                    }
+                    |
                     <a asp-page="./Details" asp-route-id="@item.Id">Details</a> |
-                    <a asp-page="./Delete" asp-route-id="@item.Id">Delete</a>
+                    @if (User.IsInRole("Admin") || userId == item.UserId)
+                    {
+                        <a asp-page="./Delete" asp-route-id="@item.Id">Delete</a>
+                    }
                 </td>
             </tr>
         }

@@ -11,7 +11,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace App.Pages.Posts;
 
-[Authorize(Roles = "Admin")]
+[Authorize]
 public class DeleteModel : PageModel
 {
     private readonly App.Data.ApplicationDbContext _context;

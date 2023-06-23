@@ -28,7 +28,6 @@ public class IndexModel : PageModel
         if (_context.Post != null)
         {
             Posts = await _context.Post.ToListAsync();
-            Console.WriteLine("updated" + Posts[2].UpdatedAt);
         }
     }
 }
