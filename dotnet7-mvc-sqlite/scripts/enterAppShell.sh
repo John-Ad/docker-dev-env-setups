@@ -1,6 +1,6 @@
 
 # go to root directory of project
-while [[ $PWD != '/' && ${PWD##*/} != 'blazor-sqlite' ]]; do cd ..; done
+while [[ $PWD != '/' && ${PWD##*/} != 'dotnet7-mvc-sqlite' ]]; do cd ..; done
 
 # if the name of the current dir is / exit with error
 if [[ $PWD == '/' ]]; then
@@ -8,7 +8,7 @@ if [[ $PWD == '/' ]]; then
     exit 1
 fi
 
-dockerContainerName="blazor-sqlite-app-1"
+dockerContainerName="dotnet7-mvc-sqlite-app-1"
 
 
 echo "Entering shell of docker container with name $dockerContainerName"

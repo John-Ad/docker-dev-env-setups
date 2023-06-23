@@ -10,6 +10,12 @@ RUN apt-get update && apt-get install -y \
     curl \
     && apt-get clean
 
+# Install dotnet-ef and code generator
+RUN dotnet tool install --global dotnet-ef && dotnet tool install -g dotnet-aspnet-codegenerator
+
+# Add dotnet tools to path at end of bashrc
+RUN echo export PATH="$PATH:$HOME/.dotnet/tools/" >> ~/.bashrc 
+
 # Install Sqlite3
 RUN apt-get update && apt-get install -y sqlite3 libsqlite3-dev
 
