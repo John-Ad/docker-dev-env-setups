@@ -12,4 +12,6 @@ public class ApplicationDbContext : IdentityDbContext
     {
     }
     public DbSet<App.Models.Store> Store { get; set; } = default!;
+    public DbSet<App.Models.Employee> Employee { get; set; } = default!;
+    public DbSet<App.Models.Product> Product { get; set; } = default!;
 }

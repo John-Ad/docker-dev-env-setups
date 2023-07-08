@@ -25,4 +25,6 @@ public class Store
 
     [Required]
     public string? Phone { get; set; }
+
+    public List<Employee> Employees { get; set; } = new();
 }
