@@ -21,7 +21,20 @@ namespace App.Pages.Employees
         }
 
         [BindProperty]
-        public Employee Employee { get; set; } = default!;
+        public InputData inputData { get; set; } = default!;
+
+        public Store? store { get; set; } = default!;
+
+
+        public class InputData
+        {
+            public int Id { get; set; }
+            public String EmployeeNumber { get; set; } = null!;
+            public string Name { get; set; } = null!;
+            public string Surname { get; set; } = null!;
+            public string Cell { get; set; } = null!;
+            public int StoreId { get; set; }
+        }
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {
@@ -30,13 +43,21 @@ namespace App.Pages.Employees
                 return NotFound();
             }
 
-            var employee =  await _context.Employee.FirstOrDefaultAsync(m => m.Id == id);
+            var employee = await _context.Employee.FirstOrDefaultAsync(m => m.Id == id);
             if (employee == null)
             {
                 return NotFound();
             }
-            Employee = employee;
-           ViewData["StoreId"] = new SelectList(_context.Store, "Id", "Address");
+            inputData = new InputData
+            {
+                Id = employee.Id,
+                EmployeeNumber = employee.EmployeeNumber,
+                Name = employee.Name,
+                Surname = employee.Surname,
+                Cell = employee.Cell ?? "",
+                StoreId = employee.StoreId
+            };
+            ViewData["StoreId"] = new SelectList(_context.Store, "Id", "Address");
             return Page();
         }
 
@@ -44,35 +65,40 @@ namespace App.Pages.Employees
         // For more details, see https://aka.ms/RazorPagesCRUD.
         public async Task<IActionResult> OnPostAsync()
         {
-            if (!ModelState.IsValid)
-            {
-                return Page();
-            }
-
-            _context.Attach(Employee).State = EntityState.Modified;
-
             try
             {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!EmployeeExists(Employee.Id))
+                if (!ModelState.IsValid)
+                {
+                    store = await _context.Store.FirstOrDefaultAsync(m => m.Id == inputData.StoreId);
+                    return Page();
+                }
+
+                var original = await _context.Employee.FirstOrDefaultAsync(m => m.Id == inputData.Id);
+                if (original is null)
                 {
                     return NotFound();
                 }
-                else
-                {
-                    throw;
-                }
-            }
 
-            return RedirectToPage("./Index");
+                original.EmployeeNumber = inputData.EmployeeNumber;
+                original.Name = inputData.Name;
+                original.Surname = inputData.Surname;
+                original.Cell = inputData.Cell;
+
+                _context.Employee.Update(original);
+                await _context.SaveChangesAsync();
+
+                return RedirectToPage("./Index", new { storeId = original.StoreId });
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return Page();
+            }
         }
 
         private bool EmployeeExists(int id)
         {
-          return (_context.Employee?.Any(e => e.Id == id)).GetValueOrDefault();
+            return (_context.Employee?.Any(e => e.Id == id)).GetValueOrDefault();
         }
     }
 }

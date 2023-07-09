@@ -22,16 +22,16 @@ namespace App.Pages.Employees
         /// <summary>
         ///     Returns the create employee page
         /// </summary>
-        /// <param name="id">Store id</param>
+        /// <param name="storeId">Store id</param>
         /// <returns></returns>
-        public async Task<IActionResult> OnGetAsync(int? id)
+        public async Task<IActionResult> OnGetAsync(int? storeId)
         {
-            if (id is null)
+            if (storeId is null)
             {
                 return NotFound();
             }
 
-            store = await _context.Store.FirstOrDefaultAsync(m => m.Id == id);
+            store = await _context.Store.FirstOrDefaultAsync(m => m.Id == storeId);
             if (store == null)
             {
                 return NotFound();
@@ -60,7 +60,7 @@ namespace App.Pages.Employees
         {
             try
             {
-                if (!ModelState.IsValid || _context.Employee == null || inputData == null)
+                if (!ModelState.IsValid || _context.Employee == null)
                 {
                     store = await _context.Store.FirstOrDefaultAsync(m => m.Id == inputData.StoreId);
                     return Page();
@@ -76,7 +76,7 @@ namespace App.Pages.Employees
                 });
                 await _context.SaveChangesAsync();
 
-                return RedirectToPage("./Index", new { id = inputData.StoreId });
+                return RedirectToPage("./Index", new { storeId = inputData.StoreId });
             }
             catch (Exception ex)
             {

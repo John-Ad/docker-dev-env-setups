@@ -22,9 +22,9 @@ namespace App.Pages.Employees
         public IList<Employee> employees { get; set; } = default!;
         public Store? store { get; set; } = default!;
 
-        public async Task<IActionResult> OnGetAsync(int? id)
+        public async Task<IActionResult> OnGetAsync(int? storeId)
         {
-            if (id is null)
+            if (storeId is null)
             {
                 return NotFound();
             }
@@ -32,10 +32,10 @@ namespace App.Pages.Employees
             if (_context.Employee != null)
             {
                 employees = await _context.Employee
-                .Where(e => e.StoreId == id)
+                .Where(e => e.StoreId == storeId)
                 .Include(e => e.Store).ToListAsync();
 
-                store = await _context.Store.FirstOrDefaultAsync(m => m.Id == id);
+                store = await _context.Store.FirstOrDefaultAsync(m => m.Id == storeId);
                 if (store == null)
                 {
                     return NotFound();

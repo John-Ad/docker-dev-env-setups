@@ -13,31 +13,27 @@
     <div class="col-md-4">
         <form method="post">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="Employee.Id" />
+            <input type="hidden" asp-for="inputData.Id" value="@Model.inputData.Id" />
+            <input type="hidden" asp-for="inputData.StoreId" value="@Model.inputData.StoreId" />
             <div class="form-group">
-                <label asp-for="Employee.EmployeeNumber" class="control-label"></label>
-                <input asp-for="Employee.EmployeeNumber" class="form-control" />
-                <span asp-validation-for="Employee.EmployeeNumber" class="text-danger"></span>
+                <label asp-for="inputData.EmployeeNumber" class="control-label"></label>
+                <input asp-for="inputData.EmployeeNumber" class="form-control" readonly />
+                <span asp-validation-for="inputData.EmployeeNumber" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Employee.Name" class="control-label"></label>
-                <input asp-for="Employee.Name" class="form-control" />
-                <span asp-validation-for="Employee.Name" class="text-danger"></span>
+                <label asp-for="inputData.Name" class="control-label"></label>
+                <input asp-for="inputData.Name" class="form-control" />
+                <span asp-validation-for="inputData.Name" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Employee.Surname" class="control-label"></label>
-                <input asp-for="Employee.Surname" class="form-control" />
-                <span asp-validation-for="Employee.Surname" class="text-danger"></span>
+                <label asp-for="inputData.Surname" class="control-label"></label>
+                <input asp-for="inputData.Surname" class="form-control" />
+                <span asp-validation-for="inputData.Surname" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Employee.Cell" class="control-label"></label>
-                <input asp-for="Employee.Cell" class="form-control" />
-                <span asp-validation-for="Employee.Cell" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Employee.StoreId" class="control-label"></label>
-                <select asp-for="Employee.StoreId" class="form-control" asp-items="ViewBag.StoreId"></select>
-                <span asp-validation-for="Employee.StoreId" class="text-danger"></span>
+                <label asp-for="inputData.Cell" class="control-label"></label>
+                <input asp-for="inputData.Cell" class="form-control" />
+                <span asp-validation-for="inputData.Cell" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />
@@ -47,9 +43,11 @@
 </div>
 
 <div>
-    <a asp-page="./Index">Back to List</a>
+    <a asp-page="./Index" asp-route-storeId="@Model.inputData.StoreId">Back to List</a>
 </div>
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 }
