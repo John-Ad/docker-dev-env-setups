@@ -43,10 +43,10 @@
             @Html.DisplayFor(model => model.Employee.Store.Address)
         </dd>
     </dl>
-    
+
     <form method="post">
         <input type="hidden" asp-for="Employee.Id" />
         <input type="submit" value="Delete" class="btn btn-danger" /> |
-        <a asp-page="./Index">Back to List</a>
+        <a asp-page="./Index" asp-route-storeId="@Model.Employee?.StoreId">Back to List</a>
     </form>
 </div>

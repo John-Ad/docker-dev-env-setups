@@ -20,7 +20,7 @@ namespace App.Pages.Employees
         }
 
         [BindProperty]
-      public Employee Employee { get; set; } = default!;
+        public Employee Employee { get; set; } = default!;
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {
@@ -35,7 +35,7 @@ namespace App.Pages.Employees
             {
                 return NotFound();
             }
-            else 
+            else
             {
                 Employee = employee;
             }
@@ -49,15 +49,16 @@ namespace App.Pages.Employees
                 return NotFound();
             }
             var employee = await _context.Employee.FindAsync(id);
-
+            var storeId = 0;
             if (employee != null)
             {
+                storeId = employee.StoreId;
                 Employee = employee;
                 _context.Employee.Remove(Employee);
                 await _context.SaveChangesAsync();
             }
 
-            return RedirectToPage("./Index");
+            return RedirectToPage("./Index", new { storeId = storeId });
         }
     }
 }
