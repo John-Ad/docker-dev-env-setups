@@ -20,7 +20,7 @@ namespace App.Pages.Products
         }
 
         [BindProperty]
-      public Product Product { get; set; } = default!;
+        public Product Product { get; set; } = default!;
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {
@@ -35,7 +35,7 @@ namespace App.Pages.Products
             {
                 return NotFound();
             }
-            else 
+            else
             {
                 Product = product;
             }
@@ -57,7 +57,7 @@ namespace App.Pages.Products
                 await _context.SaveChangesAsync();
             }
 
-            return RedirectToPage("./Index");
+            return RedirectToPage("./Index", new { storeId = product.StoreId });
         }
     }
 }
