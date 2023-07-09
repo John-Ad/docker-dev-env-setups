@@ -51,8 +51,7 @@
 <hr />
 <div class="w-25 d-flex justify-content-between">
     <button>
-        @* <a asp-page="/Products" asp-route-id="@Model.Store?.Id">View Products</a> *@
-        <a asp-page="/Products/Index">View Products</a>
+        <a asp-page="/Products/Index" asp-route-storeId="@Model.Store?.Id">View Products</a>
     </button>
     <button>
         <a asp-page="/Employees/Index" asp-route-id="@Model.Store?.Id">View Employees</a>

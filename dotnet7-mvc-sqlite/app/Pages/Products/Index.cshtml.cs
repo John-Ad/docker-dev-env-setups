@@ -19,15 +19,29 @@ namespace App.Pages.Products
             _context = context;
         }
 
-        public IList<Product> Product { get;set; } = default!;
+        public IList<Product> products { get; set; } = default!;
+        public Store? store { get; set; }
 
-        public async Task OnGetAsync()
+        public async Task<IActionResult> OnGetAsync(int? storeId)
         {
+            if (storeId is null)
+            {
+                return NotFound();
+            }
+
+            store = await _context.Store.FirstOrDefaultAsync(m => m.Id == storeId);
+            if (store is null)
+            {
+                return NotFound();
+            }
+
             if (_context.Product != null)
             {
-                Product = await _context.Product
+                products = await _context.Product
                 .Include(p => p.Store).ToListAsync();
             }
+
+            return Page();
         }
     }
 }

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
 using App.Data;
 using App.Models;
 
@@ -19,28 +19,64 @@ namespace App.Pages.Products
             _context = context;
         }
 
-        public IActionResult OnGet()
+        public async Task<IActionResult> OnGetAsync(int? storeId)
         {
-        ViewData["StoreId"] = new SelectList(_context.Store, "Id", "Address");
+            if (storeId is null)
+            {
+                return NotFound();
+            }
+            store = await _context.Store.FirstOrDefaultAsync(m => m.Id == storeId);
+            if (store is null)
+            {
+                return NotFound();
+            }
+
             return Page();
         }
 
         [BindProperty]
-        public Product Product { get; set; } = default!;
-        
+        public InputData inputData { get; set; } = default!;
+
+        public Store? store { get; set; } = default!;
+
+
+        public class InputData
+        {
+
+            public String ProductNumber { get; set; } = null!;
+            public string Name { get; set; } = null!;
+            public string Description { get; set; } = null!;
+            public Decimal Price { get; set; } = 0.0M;
+            public int StoreId { get; set; }
+        }
 
         // To protect from overposting attacks, see https://aka.ms/RazorPagesCRUD
         public async Task<IActionResult> OnPostAsync()
         {
-          if (!ModelState.IsValid || _context.Product == null || Product == null)
+            try
             {
-                return Page();
+                if (!ModelState.IsValid || _context.Product is null)
+                {
+                    store = await _context.Store.FirstOrDefaultAsync(m => m.Id == inputData.StoreId);
+                    return Page();
+                }
+
+                _context.Product.Add(new Product
+                {
+                    ProductNumber = inputData.ProductNumber,
+                    Name = inputData.Name,
+                    Description = inputData.Description,
+                    Price = inputData.Price,
+                    StoreId = inputData.StoreId
+                });
+                await _context.SaveChangesAsync();
+
+                return RedirectToPage("./Index", new { storeId = inputData.StoreId });
             }
-
-            _context.Product.Add(Product);
-            await _context.SaveChangesAsync();
-
-            return RedirectToPage("./Index");
+            catch (Exception)
+            {
+                return NotFound();
+            }
         }
     }
 }
