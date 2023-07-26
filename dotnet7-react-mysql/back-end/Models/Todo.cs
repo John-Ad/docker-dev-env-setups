@@ -24,7 +24,7 @@ public class Todo
     public DateTime? UpdatedAt { get; set; }
 
     [Required]
-    public bool IsComplete { get; set; }
+    public int IsComplete { get; set; }
 
     [ForeignKey(nameof(User))]
     public int UserId { get; set; }
