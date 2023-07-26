@@ -93,7 +93,7 @@ public class AuthService
 
             result.statusCode = 200;
             result.message = "User logged in successfully";
-            result.data = new LoginResponse
+            result.data = new ApiTokens
             {
                 token = token,
                 refreshToken = refreshToken
@@ -144,6 +144,100 @@ public class AuthService
             {
                 statusCode = 500,
                 message = e.Message,
+                data = ""
+            };
+        }
+    }
+
+    public async Task<Result> RefreshToken(ApiTokens tokens)
+    {
+        try
+        {
+            var jwtHandler = new JwtHandler(_configuration);
+
+            // get token details 
+            var principal = jwtHandler.getPrincipalFromExpiredToken(tokens.token);
+
+            // check if token is valid
+            if (principal is null)
+            {
+                return new Result
+                {
+                    statusCode = 400,
+                    message = "Invalid token provided",
+                    data = ""
+                };
+            }
+
+            // get userId and roleId from claims
+            var uClaim = principal.Claims.Where(c => c.Type == "userId").FirstOrDefault();
+            var rClaim = principal.Claims.Where(c => c.Type == "roleId").FirstOrDefault();
+
+            if (uClaim is null || rClaim is null)
+            {
+                return new Result
+                {
+                    statusCode = 400,
+                    message = "Invalid claims",
+                    data = ""
+                };
+            }
+
+            var userId = uClaim.Value;
+            var roleId = rClaim.Value;
+
+            // get user
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == Int32.Parse(userId));
+            if (user is null)
+            {
+                return new Result
+                {
+                    statusCode = 404,
+                    message = "User not found",
+                    data = ""
+                };
+            }
+
+            // check if refresh tokens matches 
+            if (user.RefreshToken != tokens.refreshToken)
+            {
+                return new Result
+                {
+                    statusCode = 401,
+                    message = "Invalid refresh token",
+                    data = ""
+                };
+            }
+
+            // generate new tokens
+            var newToken = jwtHandler.generate(Int32.Parse(userId), Int32.Parse(roleId));
+            var newRefreshToken = jwtHandler.generateRefreshToken();
+
+            // save refresh token in db
+            user.RefreshToken = newRefreshToken;
+            _context.Users.Update(user);
+            await _context.SaveChangesAsync();
+
+            // return tokens
+            return new Result
+            {
+                statusCode = 200,
+                message = "Tokens refreshed successfully",
+                data = new ApiTokens
+                {
+                    token = newToken,
+                    refreshToken = newRefreshToken
+                }
+            };
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.Message);
+            Console.WriteLine(ex.StackTrace);
+            return new Result
+            {
+                statusCode = 500,
+                message = ex.Message,
                 data = ""
             };
         }
