@@ -16,14 +16,17 @@ public class Todo
     public String Description { get; set; }
 
     [Required]
-    public DateTime CreatedAt { get; set; }
+    [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
+    public DateTime? CreatedAt { get; set; }
 
     [Required]
-    public DateTime UpdatedAt { get; set; }
+    [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
+    public DateTime? UpdatedAt { get; set; }
 
     [Required]
     public bool IsComplete { get; set; }
 
     [ForeignKey(nameof(User))]
     public int UserId { get; set; }
+    public User User { get; set; }
 }

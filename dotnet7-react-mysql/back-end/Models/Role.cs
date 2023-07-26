@@ -13,4 +13,6 @@ public class Role
 
     [Required]
     public String Description { get; set; }
+
+    public List<User> Users { get; set; }
 }

@@ -4,6 +4,8 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using back_end.Utilities;
+using back_end.Services;
+using back_end.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -69,6 +71,8 @@ builder.Services.AddAuthorization(options =>
 
 
 // Add services to the container.
+builder.Services.AddScoped<RoleService>();
+builder.Services.AddScoped<AuthService>();
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -98,5 +102,34 @@ app.UseAuthorization();
 
 app.MapControllers();
 app.MapFallbackToFile("index.html");
+
+// create default roles and admin user
+using (var scope = app.Services.CreateScope())
+{
+    var roleServce = scope.ServiceProvider.GetRequiredService<RoleService>();
+    var authService = scope.ServiceProvider.GetRequiredService<AuthService>();
+
+    var roles = new Role[] {
+        new Role {Id=(int)ROLES.ADMIN ,Name = "Admin", Description = "Admin"},
+        new Role { Id=(int)ROLES.USER,Name = "User", Description="User" }
+    };
+    foreach (var role in roles)
+    {
+        await roleServce.Add(role);
+    }
+
+    var user = new User
+    {
+        Id = 1,
+        RoleId = (int)ROLES.ADMIN,
+        Email = "admin@admin.com",
+        Password = "Admin@123",
+        RefreshToken = "",
+        EmailConfirmationToken = "",
+        EmailConfirmed = true,
+    };
+
+    await authService.CreateUser(user);
+}
 
 app.Run();

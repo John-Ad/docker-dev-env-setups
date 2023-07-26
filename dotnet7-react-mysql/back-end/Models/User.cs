@@ -24,4 +24,11 @@ public class User
     [Required]
     public bool EmailConfirmed { get; set; }
 
+
+    [ForeignKey(nameof(Role))]
+    public int RoleId { get; set; }
+    public Role Role { get; set; }
+
+
+    public List<Todo> Todos { get; set; }
 }
