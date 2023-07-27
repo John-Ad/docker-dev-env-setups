@@ -1,13 +1,40 @@
-import React, { useState } from 'react';
-import { Form, Button, Container, Row, Col } from 'react-bootstrap';
+import { useState } from 'react';
+import { Button, Container, Form } from 'react-bootstrap';
+import { useNavigate } from 'react-router-dom';
+import { AuthApi } from '../../api/authApi';
+import { IApiTokens, ILoginResponse, IResult } from '../../api/interfaces/interfaces';
+import { errorToast, successToast } from '../../components/toasts/toasts';
+import { Connection } from '../../api/connection';
 
 export const LoginPage = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
 
-    const handleSubmit = (event) => {
+    const navigate = useNavigate();
+
+    const handleSubmit = async (event) => {
         event.preventDefault();
-        // Handle login logic here
+        if (email === "") {
+            errorToast("Email is required", true);
+            return;
+        }
+        if (password === "") {
+            errorToast("Password is required", true);
+            return;
+        }
+
+        let result: IResult = await AuthApi.login({ email: email, password: password });
+        if (result.statusCode !== 200) {
+            errorToast(result.message, true);
+            return;
+        }
+
+        successToast("Successfully logged in", true);
+
+        let authData: ILoginResponse = result.data;
+        Connection.setConnectionDetail(email, authData.tokens.token, authData.tokens.refreshToken, authData.id, authData.roleId, 1);
+
+        navigate('/');
     };
 
     return (

@@ -94,10 +94,16 @@ public class AuthService
 
             result.statusCode = 200;
             result.message = "User logged in successfully";
-            result.data = new ApiTokens
+            result.data = new LoginResponse
             {
-                token = token,
-                refreshToken = refreshToken
+                id = existingUser.Id,
+                roleId = existingUser.RoleId,
+                emailConfirmed = true,
+                tokens = new ApiTokens
+                {
+                    token = token,
+                    refreshToken = refreshToken
+                }
             };
             return result;
         }

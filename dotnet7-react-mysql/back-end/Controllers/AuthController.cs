@@ -26,7 +26,7 @@ public class AuthController : ControllerBase
             });
 
             if (result.statusCode == 200)
-                return Ok(result.data);
+                return Ok(result);
 
             return StatusCode(result.statusCode, result);
         }

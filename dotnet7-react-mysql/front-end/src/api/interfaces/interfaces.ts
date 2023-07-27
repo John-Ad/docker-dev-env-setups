@@ -19,3 +19,10 @@ export interface ILoginRequest {
     email: string;
     password: string;
 }
+
+export interface ILoginResponse {
+    id: number;
+    roleId: number;
+    emailConfirmed: boolean;
+    tokens: IApiTokens;
+}
