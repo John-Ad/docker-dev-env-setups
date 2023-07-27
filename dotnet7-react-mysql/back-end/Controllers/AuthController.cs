@@ -4,7 +4,7 @@ using back_end.Services;
 using Microsoft.AspNetCore.Mvc;
 
 [ApiController]
-[Route("[controller]")]
+[Route("api/auth")]
 public class AuthController : ControllerBase
 {
     private readonly AuthService _authService;
@@ -28,7 +28,7 @@ public class AuthController : ControllerBase
             if (result.statusCode == 200)
                 return Ok(result.data);
 
-            return StatusCode(result.statusCode, result.message);
+            return StatusCode(result.statusCode, result);
         }
         catch (Exception ex)
         {
@@ -51,7 +51,7 @@ public class AuthController : ControllerBase
             if (result.statusCode == 201)
                 return CreatedAtAction(nameof(Login), result.data);
 
-            return StatusCode(result.statusCode, result.message);
+            return StatusCode(result.statusCode, result);
         }
         catch (Exception ex)
         {
@@ -71,7 +71,7 @@ public class AuthController : ControllerBase
             if (result.statusCode == 200)
                 return Ok(result.data);
 
-            return StatusCode(result.statusCode, result.message);
+            return StatusCode(result.statusCode, result);
         }
         catch (Exception ex)
         {

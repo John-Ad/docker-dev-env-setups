@@ -29,9 +29,10 @@ public class AuthService
                 return result;
             }
 
+            user.RoleId = (int)ROLES.USER;
             user.Password = BCrypt.Net.BCrypt.HashPassword(user.Password);
             user.EmailConfirmationToken = Guid.NewGuid().ToString();
-            user.EmailConfirmed = false;
+            user.EmailConfirmed = true;
             user.RefreshToken = Guid.NewGuid().ToString();
 
             await _context.Users.AddAsync(user);
