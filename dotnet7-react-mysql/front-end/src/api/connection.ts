@@ -2,9 +2,9 @@ import Axios, { AxiosError, AxiosRequestConfig, AxiosResponse } from "axios";
 import { IApiTokens, IResult } from "./interfaces/interfaces";
 
 enum AUTH_ENDPOINTS {
-    LOGIN = "/login",
-    REGISTER = "/register",
-    REFRESH_TOKEN = "/refresh-token",
+    LOGIN = "/api/auth/login",
+    REGISTER = "/api/auth/register",
+    REFRESH_TOKEN = "/api/auth/refresh-token",
 }
 
 enum STORAGE_ITEM {

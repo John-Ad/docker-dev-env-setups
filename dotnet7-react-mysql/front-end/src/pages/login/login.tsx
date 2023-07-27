@@ -2,11 +2,14 @@ import { useState } from 'react';
 import { Button, Container, Form } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import { AuthApi } from '../../api/authApi';
-import { IApiTokens, ILoginResponse, IResult } from '../../api/interfaces/interfaces';
+import { IApiTokens, IGlobalContext, ILoginResponse, IResult } from '../../api/interfaces/interfaces';
 import { errorToast, successToast } from '../../components/toasts/toasts';
 import { Connection } from '../../api/connection';
 
-export const LoginPage = () => {
+interface IProps {
+    context: IGlobalContext
+}
+export const LoginPage = (props: IProps) => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
 
@@ -33,6 +36,10 @@ export const LoginPage = () => {
 
         let authData: ILoginResponse = result.data;
         Connection.setConnectionDetail(email, authData.tokens.token, authData.tokens.refreshToken, authData.id, authData.roleId, 1);
+
+        props.context.setIsLoggedIn(true);
+        props.context.setRoleId(authData.roleId);
+        props.context.setUserId(authData.id);
 
         navigate('/');
     };

@@ -32,6 +32,7 @@ public class TodoService : ITodoService
     {
         try
         {
+            entity.UpdatedAt = DateTime.Now;
             entity.CreatedAt = DateTime.Now;
 
             var created = await _context.Todos.AddAsync(entity);

@@ -5,6 +5,11 @@ export interface IResult {
     message: string;
 }
 
+export enum ROLES {
+    ADMIN = 1,
+    USER = 2
+}
+
 export interface IRegisterRequest {
     email: string;
     password: string;
@@ -25,4 +30,26 @@ export interface ILoginResponse {
     roleId: number;
     emailConfirmed: boolean;
     tokens: IApiTokens;
+}
+
+export interface ITodo {
+    id?: number;
+    name: string;
+    description: string;
+    createdAt?: string;
+    updatedAt?: string;
+    isComplete?: boolean;
+    userId: number;
+}
+
+export interface IGlobalContext {
+    email: string;
+    setEmail: (email: string) => void;
+    userId: number;
+    setUserId: (userId: number) => void;
+    roleId: number,
+    setRoleId: (roleId: number) => void;
+    isLoggedIn: boolean;
+    setIsLoggedIn: (isLoggedIn: boolean) => void;
+    logout: () => void;
 }
