@@ -48,7 +48,6 @@ const AddEditModal = (props: IProps) => {
     const [state, setState] = useState<any>({});
 
 
-    // COMPONENT DID MOUNT
     useEffect(() => {
 
         let initState = {};
@@ -139,7 +138,9 @@ const AddEditModal = (props: IProps) => {
                 <Modal.Body>
                     {
                         loading &&
-                        <Loading />
+                        <div className="w-100 d-flex justify-content-center">
+                            <Loading />
+                        </div>
                     }
                     {
                         (loading && props.uploadProgress && props.uploadProgress > 0) &&

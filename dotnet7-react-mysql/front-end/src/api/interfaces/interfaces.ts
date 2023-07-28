@@ -33,13 +33,20 @@ export interface ILoginResponse {
 }
 
 export interface ITodo {
-    id?: number;
+    id: number;
     name: string;
     description: string;
     createdAt?: string;
     updatedAt?: string;
     isComplete?: boolean;
     userId: number;
+}
+
+export interface ITodoRequest {
+    id?: number;
+    userId: number;
+    name: string;
+    description: string;
 }
 
 export interface IGlobalContext {

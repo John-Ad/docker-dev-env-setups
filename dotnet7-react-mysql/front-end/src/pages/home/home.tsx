@@ -2,9 +2,10 @@ import { FC, useEffect, useState } from 'react';
 import { Button, Table } from 'react-bootstrap';
 import { IGlobalContext, ITodo, ROLES } from '../../api/interfaces/interfaces';
 import { TodoApi } from '../../api/todoApi';
-import { errorToast, successToast } from '../../components/toasts/toasts';
+import { confirmChoice, errorToast, successToast } from '../../components/toasts/toasts';
 import AddEditModal, { INPUT_TYPE } from '../../components/add-edit-modal/addEditModal';
-import { Pencil } from 'react-bootstrap-icons';
+import { Pencil, Trash } from 'react-bootstrap-icons';
+import Loading from '../../components/loading-spinner/loadingSpinner';
 
 interface IProps {
     context: IGlobalContext
@@ -14,12 +15,16 @@ export const HomePage: FC<IProps> = ({ context }) => {
     const [showAdding, setShowAdding] = useState(false);
     const [todoToEdit, setTodoToEdit] = useState<ITodo>();
 
+    const [loading, setLoading] = useState(false);
+
     useEffect(() => {
         getAll();
     }, []);
 
     const getAll = async () => {
+        setLoading(true);
         let result = context.roleId === ROLES.ADMIN ? await TodoApi.getAll() : await TodoApi.getAllForUser(context.userId);
+        setLoading(false);
         if (result.statusCode !== 200) {
             errorToast(result.message);
             return;
@@ -43,16 +48,42 @@ export const HomePage: FC<IProps> = ({ context }) => {
         return true;
     }
     const edit = async (todo: ITodo): Promise<boolean> => {
-        let result = await TodoApi.update(todo);
-        if (result.statusCode !== 200) {
-            errorToast(result.message);
+        if (!todoToEdit) {
+            errorToast("Nothing is being edited!");
             return false;
         }
-        successToast("Todo edited successfully");
+
+        let result = await TodoApi.update({
+            id: todoToEdit?.id || 0,
+            userId: context.userId,
+            name: todo.name,
+            description: todo.description,
+        });
+        if (result.statusCode !== 200) {
+            errorToast(result.message, true);
+            return false;
+        }
+        successToast("Todo edited successfully", true);
         getAll();
         setTodoToEdit(undefined);
         return true;
     }
+    const deleteItem = async (id: number) => {
+        let confirm = await confirmChoice("Are you sure you want to delete this todo?", "This action cannot be undone!");
+        if (!confirm.isConfirmed) return;
+
+        setLoading(true);
+        let result = await TodoApi.delete(id);
+        setLoading(false);
+        if (result.statusCode !== 200) {
+            errorToast(result.message, true);
+            return;
+        }
+
+        successToast("Todo deleted successfully", true);
+        getAll();
+    }
+
 
     return (
         <div className='p-5' >
@@ -60,7 +91,7 @@ export const HomePage: FC<IProps> = ({ context }) => {
                 <h1 className='py-3'>List of Todos</h1>
                 <Button variant='success' onClick={() => setShowAdding(true)}>Add New</Button>
             </div>
-            <Table striped hover className=''>
+            <Table striped hover responsive>
                 <thead>
                     <tr>
                         <th>Name</th>
@@ -72,16 +103,30 @@ export const HomePage: FC<IProps> = ({ context }) => {
                     </tr>
                 </thead>
                 <tbody>
-                    {todos.map((todo: any) => (
-                        <tr key={todo.id}>
-                            <td>{todo.name}</td>
-                            <td>{todo.description}</td>
-                            <td>{todo.createdAt}</td>
-                            <td>{todo.updatedAt}</td>
-                            <td>{todo.isComplete}</td>
-                            <td><Pencil /></td>
+                    {
+                        !loading &&
+                        todos.map((todo: ITodo) => (
+                            <tr key={todo.id}>
+                                <td>{todo.name}</td>
+                                <td>{todo.description}</td>
+                                <td>{todo.createdAt}</td>
+                                <td>{todo.updatedAt}</td>
+                                <td>{todo.isComplete}</td>
+                                <td>
+                                    <div className='d-flex justify-content-evenly'>
+                                        <Pencil className='hover-pointer' onClick={() => setTodoToEdit(todo)} />
+                                        <Trash className='hover-pointer bg-red' onClick={() => deleteItem(todo.id)} />
+                                    </div>
+                                </td>
+                            </tr>
+                        ))
+                    }
+                    {
+                        loading &&
+                        <tr>
+                            <td colSpan={6} className='text-center'><Loading /></td>
                         </tr>
-                    ))}
+                    }
                 </tbody>
             </Table>
 
@@ -107,7 +152,7 @@ export const HomePage: FC<IProps> = ({ context }) => {
                     submit={edit}
                     fields={[
                         { key: "name", name: "Name", type: INPUT_TYPE.TEXT, value: todoToEdit.name, required: true },
-                        { key: "description", name: "Description", type: INPUT_TYPE.TEXT_AREA, value: todoToEdit.description, required: true },
+                        { key: "description", name: "Description", type: INPUT_TYPE.TEXT, value: todoToEdit.description, required: true },
                     ]}
                 />
             }

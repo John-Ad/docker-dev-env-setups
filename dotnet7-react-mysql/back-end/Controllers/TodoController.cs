@@ -56,7 +56,7 @@ public class TodoController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<IActionResult> Add(NewTodoRequest todo)
+    public async Task<IActionResult> Add(TodoRequest todo)
     {
         try
         {
@@ -79,12 +79,18 @@ public class TodoController : ControllerBase
         }
     }
 
-    [HttpPut("{id}")]
-    public async Task<IActionResult> Update(int id, Todo todo)
+    [HttpPost("{id}")]
+    public async Task<IActionResult> Update(int id, [FromBody] TodoRequest todo)
     {
         try
         {
-            var result = await _todoService.Update(todo);
+            var result = await _todoService.Update(new Todo
+            {
+                Id = id,
+                UserId = todo.userId,
+                Name = todo.name,
+                Description = todo.description,
+            });
             return StatusCode(result.statusCode, result);
         }
         catch (Exception ex)

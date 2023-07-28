@@ -1,5 +1,5 @@
 import { Connection } from "./connection";
-import { ITodo } from "./interfaces/interfaces";
+import { ITodo, ITodoRequest } from "./interfaces/interfaces";
 
 export class TodoApi {
     static BaseEndpoint = "/api/todo";
@@ -14,12 +14,12 @@ export class TodoApi {
         return response;
     }
 
-    static async add(todo: ITodo) {
+    static async add(todo: ITodoRequest) {
         let response = await Connection.postRequest(this.BaseEndpoint, todo, {});
         return response;
     }
 
-    static async update(todo: ITodo) {
+    static async update(todo: ITodoRequest) {
         let response = await Connection.postRequest(this.BaseEndpoint + `/${todo.id}`, todo, {});
         return response;
     }
