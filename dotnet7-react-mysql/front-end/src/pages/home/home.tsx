@@ -11,15 +11,27 @@ interface IProps {
     context: IGlobalContext
 }
 export const HomePage: FC<IProps> = ({ context }) => {
-    const [todos, setTodos] = useState<ITodo[]>([]);
+    const [todosOriginal, setTodosOriginal] = useState<ITodo[]>([]);
+    const [todosToShow, setTodosToShow] = useState<ITodo[]>([]);
     const [showAdding, setShowAdding] = useState(false);
     const [todoToEdit, setTodoToEdit] = useState<ITodo>();
+    const [showTodo, setShowTodo] = useState(true);
 
     const [loading, setLoading] = useState(false);
 
     useEffect(() => {
         getAll();
     }, []);
+
+    useEffect(() => {
+        filterTodos();
+    }, [showTodo, todosOriginal]);
+
+    const filterTodos = () => {
+        console.log(todosOriginal);
+        let temp = todosOriginal.filter((todo: ITodo) => (todo.isComplete === 0) === showTodo);
+        setTodosToShow(temp);
+    }
 
     const getAll = async () => {
         setLoading(true);
@@ -29,7 +41,7 @@ export const HomePage: FC<IProps> = ({ context }) => {
             errorToast(result.message);
             return;
         }
-        setTodos(result.data);
+        setTodosOriginal(result.data);
     }
 
     const addNew = async (todo: ITodo): Promise<boolean> => {
@@ -83,13 +95,42 @@ export const HomePage: FC<IProps> = ({ context }) => {
         successToast("Todo deleted successfully", true);
         getAll();
     }
+    const markDone = async (id: number) => {
+        setLoading(true);
+        let result = await TodoApi.markAsComplete(id);
+        setLoading(false);
+        if (result.statusCode !== 200) {
+            errorToast(result.message, true);
+            return;
+        }
+
+        successToast("Todo marked as done successfully", true);
+        getAll();
+    }
+    const markIncomplete = async (id: number) => {
+        setLoading(true);
+        let result = await TodoApi.markAsIncomplete(id);
+        setLoading(false);
+        if (result.statusCode !== 200) {
+            errorToast(result.message, true);
+            return;
+        }
+
+        successToast("Todo marked as incomplete successfully", true);
+        getAll();
+    }
 
 
     return (
         <div className='p-5' >
             <div className='d-flex justify-content-between'>
                 <h1 className='py-3'>List of Todos</h1>
-                <Button variant='success' onClick={() => setShowAdding(true)}>Add New</Button>
+                <Button variant='success' className='px-5' onClick={() => setShowAdding(true)}>New</Button>
+            </div>
+
+            <div className='d-flex pb-2'>
+                <Button variant={showTodo ? "primary" : "secondary"} onClick={() => setShowTodo(true)}>Todo</Button>
+                <Button variant={!showTodo ? "primary" : "secondary"} className='ms-2' onClick={() => setShowTodo(false)}>Done</Button>
             </div>
             <Table striped hover responsive>
                 <thead>
@@ -97,29 +138,42 @@ export const HomePage: FC<IProps> = ({ context }) => {
                         <th>Name</th>
                         <th>Description</th>
                         <th>Created At</th>
-                        <th>Updated At</th>
-                        <th>Is Complete</th>
                         <th></th>
                     </tr>
                 </thead>
                 <tbody>
                     {
                         !loading &&
-                        todos.map((todo: ITodo) => (
-                            <tr key={todo.id}>
-                                <td>{todo.name}</td>
-                                <td>{todo.description}</td>
-                                <td>{todo.createdAt}</td>
-                                <td>{todo.updatedAt}</td>
-                                <td>{todo.isComplete}</td>
-                                <td>
-                                    <div className='d-flex justify-content-evenly'>
-                                        <Pencil className='hover-pointer' onClick={() => setTodoToEdit(todo)} />
-                                        <Trash className='hover-pointer bg-red' onClick={() => deleteItem(todo.id)} />
-                                    </div>
-                                </td>
-                            </tr>
-                        ))
+                        todosToShow.map((todo: ITodo) => {
+                            let createdAt = new Date(todo.createdAt ?? 0).toLocaleString();
+                            return (
+                                <tr key={todo.id}>
+                                    <td style={{ paddingTop: "1rem" }}>{todo.name}</td>
+                                    <td style={{ paddingTop: "1rem" }}>{todo.description}</td>
+                                    <td style={{ paddingTop: "1rem" }}>{createdAt}</td>
+                                    <td>
+                                        <div className='d-flex justify-content-evenly align-items-center'>
+                                            <Button variant={showTodo ? "primary" : "danger"} onClick={() => {
+                                                if (showTodo)
+                                                    markDone(todo.id)
+                                                else
+                                                    markIncomplete(todo.id)
+                                            }}>
+                                                {showTodo ? "done" : "todo"}
+                                            </Button>
+                                            <Pencil className='hover-pointer' onClick={() => setTodoToEdit(todo)} />
+                                            <Trash className='hover-pointer bg-red' onClick={() => deleteItem(todo.id)} />
+                                        </div>
+                                    </td>
+                                </tr>
+                            )
+                        })
+                    }
+                    {
+                        !loading && todosToShow.length === 0 &&
+                        <tr>
+                            <td colSpan={6} className='text-center'>No data found</td>
+                        </tr>
                     }
                     {
                         loading &&

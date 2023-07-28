@@ -38,7 +38,7 @@ export interface ITodo {
     description: string;
     createdAt?: string;
     updatedAt?: string;
-    isComplete?: boolean;
+    isComplete?: number;
     userId: number;
 }
 

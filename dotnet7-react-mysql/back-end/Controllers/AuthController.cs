@@ -25,9 +25,6 @@ public class AuthController : ControllerBase
                 Password = request.password
             });
 
-            if (result.statusCode == 200)
-                return Ok(result);
-
             return StatusCode(result.statusCode, result);
         }
         catch (Exception ex)
@@ -47,9 +44,6 @@ public class AuthController : ControllerBase
                 Email = request.email,
                 Password = request.password,
             });
-
-            if (result.statusCode == 201)
-                return CreatedAtAction(nameof(Login), result.data);
 
             return StatusCode(result.statusCode, result);
         }
