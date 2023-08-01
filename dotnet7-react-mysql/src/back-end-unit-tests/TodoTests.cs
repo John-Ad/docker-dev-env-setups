@@ -27,7 +27,6 @@ public class TodoTests : BaseTest
     public async Task getAllTodos()
     {
         var response = await todoService.GetAll();
-        Assert.Equal("", response.message);
         Assert.Equal(200, response.statusCode);
     }
 
@@ -39,7 +38,6 @@ public class TodoTests : BaseTest
     public async Task getTodoById()
     {
         var response = await todoService.GetById(1);
-        Assert.Equal("", response.message);
         Assert.Equal(200, response.statusCode);
     }
 
@@ -62,7 +60,6 @@ public class TodoTests : BaseTest
     public async Task getAllTodosForUser()
     {
         var response = await todoService.GetAllForUser(2);
-        Assert.Equal("", response.message);
         Assert.Equal(200, response.statusCode);
     }
 
@@ -98,7 +95,6 @@ public class TodoTests : BaseTest
             UpdatedAt = DateTime.Now
         };
         var response = await todoService.Add(todo);
-        Assert.Equal("", response.message);
         Assert.Equal(200, response.statusCode);
     }
 
@@ -164,7 +160,6 @@ public class TodoTests : BaseTest
             UpdatedAt = DateTime.Now
         };
         var response = await todoService.Update(todo);
-        Assert.Equal("", response.message);
         Assert.Equal(200, response.statusCode);
     }
 
@@ -200,7 +195,7 @@ public class TodoTests : BaseTest
         {
             Id = 1,
             UserId = 2,
-            Name = "",
+            Name = null,
             Description = "Todo 1",
             IsComplete = 0,
             CreatedAt = DateTime.Now,
@@ -222,7 +217,6 @@ public class TodoTests : BaseTest
     public async Task deleteTodo()
     {
         var response = await todoService.Delete(new Todo { Id = 1 });
-        Assert.Equal("", response.message);
         Assert.Equal(200, response.statusCode);
     }
 

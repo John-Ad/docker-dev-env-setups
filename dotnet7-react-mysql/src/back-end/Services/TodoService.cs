@@ -32,8 +32,29 @@ public class TodoService : ITodoService
     {
         try
         {
+            if (string.IsNullOrEmpty(entity.Name))
+            {
+                return new Result
+                {
+                    statusCode = 400,
+                    message = "Name is required",
+                    data = ""
+                };
+            }
+
             entity.UpdatedAt = DateTime.Now;
             entity.CreatedAt = DateTime.Now;
+
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == entity.UserId);
+            if (user is null)
+            {
+                return new Result
+                {
+                    statusCode = 404,
+                    message = "User not found",
+                    data = ""
+                };
+            }
 
             var created = await _context.Todos.AddAsync(entity);
             await _context.SaveChangesAsync();
@@ -153,6 +174,16 @@ public class TodoService : ITodoService
     {
         try
         {
+            if (string.IsNullOrEmpty(entity.Name))
+            {
+                return new Result
+                {
+                    statusCode = 400,
+                    message = "Name is required",
+                    data = ""
+                };
+            }
+
             var existing = await _context.Todos.FirstOrDefaultAsync(t => t.Id == entity.Id);
             if (existing is null)
             {
@@ -264,6 +295,17 @@ public class TodoService : ITodoService
     {
         try
         {
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == userId);
+            if (user is null)
+            {
+                return new Result
+                {
+                    statusCode = 404,
+                    message = "User not found",
+                    data = ""
+                };
+            }
+
             var todos = await _context.Todos.Where(t => t.UserId == userId).ToListAsync();
             return new Result
             {

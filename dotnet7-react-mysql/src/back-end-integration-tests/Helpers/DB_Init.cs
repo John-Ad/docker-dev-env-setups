@@ -31,6 +31,7 @@ public class DB_Init
                 RoleId=(int)ROLES.ADMIN,
                 Email="admin@admin.com",
                 EmailConfirmed=true,
+                EmailConfirmationToken="abc",
                 Password="Admin@123",
                 RefreshToken="",
             },
@@ -39,6 +40,7 @@ public class DB_Init
                 RoleId=(int)ROLES.USER,
                 Email="user@user.com",
                 EmailConfirmed=true,
+                EmailConfirmationToken="abc",
                 Password="User@123",
                 RefreshToken="",
             },
@@ -84,5 +86,7 @@ public class DB_Init
                 UpdatedAt=DateTime.Now,
             },
         };
+        dbContext.Todos.AddRange(todos);
+        dbContext.SaveChanges();
     }
 }
