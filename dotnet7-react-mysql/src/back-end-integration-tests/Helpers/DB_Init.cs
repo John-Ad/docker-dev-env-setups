@@ -46,5 +46,43 @@ public class DB_Init
         dbContext.Users.AddRange(users);
         dbContext.SaveChanges();
 
+        List<Todo> todos = new List<Todo>(){
+            new Todo{
+                Id=1,
+                UserId=2,
+                Name="Todo 1",
+                Description="Todo 1",
+                IsComplete=0,
+                CreatedAt=DateTime.Now,
+                UpdatedAt=DateTime.Now,
+            },
+            new Todo{
+                Id=2,
+                UserId=2,
+                Name="Todo 2",
+                Description="Todo 2",
+                IsComplete=0,
+                CreatedAt=DateTime.Now,
+                UpdatedAt=DateTime.Now,
+            },
+            new Todo{
+                Id=3,
+                UserId=2,
+                Name="Todo 3",
+                Description="Todo 3",
+                IsComplete=1,
+                CreatedAt=DateTime.Now,
+                UpdatedAt=DateTime.Now,
+            },
+            new Todo{
+                Id=4,
+                UserId=2,
+                Name="Todo 4",
+                Description="Todo 4",
+                IsComplete=1,
+                CreatedAt=DateTime.Now,
+                UpdatedAt=DateTime.Now,
+            },
+        };
     }
 }
