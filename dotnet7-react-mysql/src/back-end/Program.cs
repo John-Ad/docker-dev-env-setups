@@ -22,7 +22,6 @@ builder.Services.AddCors(options =>
     });
 });
 
-//An exception of type 'MySqlConnector.MySqlException' occurred in System.Private.CoreLib.dll but was not handled in user code: 'Unable to connect to any of the specified MySQL hosts.'
 // add db context
 builder.Services.AddDbContext<ApplicationDBContext>(options =>
 {
@@ -63,7 +62,7 @@ builder.Services.AddAuthorization(options =>
         policy => policy.RequireClaim("roleId", ((int)ROLES.ADMIN).ToString())
     );
 
-    options.AddPolicy(      // require admin or parent
+    options.AddPolicy(      // require user
             Policies.REQUIRE_USER_ROLE,
             policy => policy.RequireClaim("roleId", new string[] { ((int)ROLES.USER).ToString() })
         );

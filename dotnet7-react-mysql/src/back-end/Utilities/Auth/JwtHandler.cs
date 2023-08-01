@@ -19,9 +19,7 @@ public class JwtHandler
     //----   GENERATE JWT TOKEN   ----
     public string generate(int userId, int roleId)
     {
-        // create claims
         var claims = new List<Claim>(){
-
             new Claim("userId",userId.ToString()),
             new Claim("roleId",roleId.ToString())
         };

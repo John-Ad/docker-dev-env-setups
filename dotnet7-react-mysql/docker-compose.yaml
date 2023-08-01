@@ -8,8 +8,7 @@ services:
     ports:
       - "5000:5000"
     volumes:
-      - ./back-end:/back-end
-      - ./front-end:/front-end
+      - ./src:/app
       - ./.vscode-server:/root/.vscode-server
       - ./.nuget:/root/.nuget/
     networks:

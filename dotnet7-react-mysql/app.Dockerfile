@@ -22,10 +22,10 @@ RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.3/install.sh | b
 # source nvm. Install and use node v18.12.1
 RUN /bin/bash -c "source $HOME/.nvm/nvm.sh && nvm install v18.12.1 && nvm use v18.12.1"
 
-RUN mkdir /front-end /back-end
+RUN mkdir /app
 
 # Set working directory
-WORKDIR /back-end
+WORKDIR /app
 
 # cmd to keep container running
 CMD tail -f /dev/null
