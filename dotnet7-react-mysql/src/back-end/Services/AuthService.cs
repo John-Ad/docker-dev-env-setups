@@ -21,10 +21,17 @@ public class AuthService
         var result = new Result();
         try
         {
+            if (string.IsNullOrEmpty(user.Email) || string.IsNullOrEmpty(user.Password))
+            {
+                result.statusCode = 400;
+                result.message = "Email and password are required";
+                return result;
+            }
+
             var existingUser = await _context.Users.FirstOrDefaultAsync(u => u.Email == user.Email);
             if (existingUser != null)
             {
-                result.statusCode = 400;
+                result.statusCode = 409;
                 result.message = "User already exists";
                 return result;
             }
@@ -62,6 +69,13 @@ public class AuthService
         };
         try
         {
+            if (string.IsNullOrEmpty(user.Email) || string.IsNullOrEmpty(user.Password))
+            {
+                result.statusCode = 400;
+                result.message = "Email and password are required";
+                return result;
+            }
+
             var existingUser = await _context.Users.FirstOrDefaultAsync(u => u.Email == user.Email);
             if (existingUser == null)
             {
@@ -69,7 +83,6 @@ public class AuthService
                 result.message = "User does not exist";
                 return result;
             }
-
             if (!BCrypt.Net.BCrypt.Verify(user.Password, existingUser.Password))
             {
                 result.statusCode = 400;

@@ -32,8 +32,8 @@ public class DB_Init
                 Email="admin@admin.com",
                 EmailConfirmed=true,
                 EmailConfirmationToken="abc",
-                Password="Admin@123",
-                RefreshToken="",
+                Password="$2a$11$riK3GI5PnbstVaVXmDE3aOFGFjjiIMirVQkKOO7L3yiner3E7Xkwe",
+                RefreshToken="101",
             },
             new User{
                 Id=2,
@@ -41,8 +41,8 @@ public class DB_Init
                 Email="user@user.com",
                 EmailConfirmed=true,
                 EmailConfirmationToken="abc",
-                Password="User@123",
-                RefreshToken="",
+                Password="$2a$11$riK3GI5PnbstVaVXmDE3aOFGFjjiIMirVQkKOO7L3yiner3E7Xkwe",
+                RefreshToken="101",
             },
         };
         dbContext.Users.AddRange(users);
