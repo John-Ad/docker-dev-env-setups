@@ -306,7 +306,16 @@ public class TodoService : ITodoService
                 };
             }
 
-            var todos = await _context.Todos.Where(t => t.UserId == userId).ToListAsync();
+            var todos = await _context.Todos.Where(t => t.UserId == userId).Select(t => new
+            {
+                t.Id,
+                t.Name,
+                t.Description,
+                t.IsComplete,
+                t.UserId,
+                t.CreatedAt,
+                t.UpdatedAt
+            }).ToListAsync();
             return new Result
             {
                 statusCode = 200,
