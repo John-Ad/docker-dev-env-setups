@@ -4,7 +4,7 @@ conn="Server=localhost; Database=TestDB; User=sa; Password=BCity@123; TrustServe
 
 echo "Generating Models..."
 
-echo dotnet-ef dbcontext scaffold --force \"$conn\" Microsoft.EntityFrameworkCore.SqlServer -o DB_Models | bash
+echo dotnet-ef dbcontext scaffold --force \"$conn\" Microsoft.EntityFrameworkCore.SqlServer -o DB_Models --data-annotations | bash
 
 status=$?       # get return status
 

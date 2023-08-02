@@ -11,8 +11,8 @@ services:
       MSSQL_PID: Developer
     ports:
       - 1433:1433
-    # volumes:
-    #   - ./dbData:/var/opt/mssql
+    volumes:
+      - 'bcity_db:/var/opt/mssql'
     networks:
       - my-network
 
@@ -37,6 +37,9 @@ services:
   #     - 5000
   #   networks:
   #     - my-network
+
+volumes:
+  bcity_db:
 
 networks:
   my-network:
